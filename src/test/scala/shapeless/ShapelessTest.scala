@@ -4,14 +4,14 @@ import org.scalatest.FunSuite
 
 case class Value(value: String)
 
-class ShapelessTet extends FunSuite {
+class ShapelessTest extends FunSuite {
   test("hlist") {
     val values = 13 :: "labor" :: Value("work") :: HNil
-    val n :: s :: c :: HNil = values
+    val i :: s :: cc :: HNil = values
     assert(values.head == 13)
     assert(values.tail == "labor" :: Value("work") :: HNil)
-    assert(n == values.select[Int] && n == 13)
+    assert(i == values.select[Int] && i == 13)
     assert(s == values.select[String] && s == "labor")
-    assert(c == values.select[Value] && c == Value("work"))
+    assert(cc == values.select[Value] && cc == Value("work"))
   }
 }
