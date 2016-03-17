@@ -1,6 +1,7 @@
-package shapeless
+package typelevel
 
 import org.scalatest.{FunSuite, Matchers}
+import shapeless._
 
 case class Value(value: String)
 
