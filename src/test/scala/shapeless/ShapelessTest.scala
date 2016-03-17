@@ -7,14 +7,14 @@ case class Value(value: String)
 class ShapelessTest extends FunSuite with Matchers {
   test("hlist") {
     val values = 13 :: "labor" :: Value("work") :: HNil
-    val i :: s :: cc :: HNil = values
+    val i :: s :: c :: HNil = values
     values.head shouldBe 13
     values.tail shouldBe "labor" :: Value("work") :: HNil
-    i shouldBe values.select[Int]
     i shouldBe 13
-    s shouldBe values.select[String]
+    i shouldBe values.select[Int]
     s shouldBe "labor"
-    cc shouldBe values.select[Value]
-    cc shouldBe Value("work")
+    s shouldBe values.select[String]
+    c shouldBe Value("work")
+    c shouldBe values.select[Value]
   }
 }
