@@ -6,6 +6,7 @@ ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
 libraryDependencies ++= {
   Seq(
     "org.typelevel" % "cats-core_2.11" % "0.7.2",
+    "com.typesafe.scala-logging" % "scala-logging_2.11" % "3.5.0",
     "org.scalatest" % "scalatest_2.11" % "3.0.0" % "test"
   )
 }
