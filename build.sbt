@@ -5,8 +5,7 @@ scalaVersion := "2.11.8"
 ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
 libraryDependencies ++= {
   Seq(
-    "org.typelevel" % "cats-core_2.11" % "0.7.0",
-    "com.chuusai" %% "shapeless" % "2.3.2",
+    "org.typelevel" % "cats-core_2.11" % "0.7.2",
     "org.scalatest" % "scalatest_2.11" % "3.0.0" % "test"
   )
 }
