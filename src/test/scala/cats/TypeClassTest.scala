@@ -23,6 +23,9 @@ class TypeClassTest extends FunSuite with Matchers {
   test("apply") {
     val incr: Int => Int = _ + 1
     Apply[Option].ap(Some(incr)) (Some(1)) shouldBe Some(2)
+    val multiply: (Int, Int) => Int = _ * _
+    val options = Option(3) |@| Option(3)
+    options map multiply shouldBe Some(9)
   }
 
   test("applicative") {
