@@ -20,6 +20,11 @@ class TypeClassTest extends FunSuite with Matchers {
     Functor[List].fproduct( List(1, 2) ) (_ + 1).toMap shouldBe Map( 1 -> 2, 2 -> 3 )
   }
 
+  test("apply") {
+    val incr: Int => Int = _ + 1
+    Apply[Option].ap(Some(incr)) (Some(1)) shouldBe Some(2)
+  }
+
   test("applicative") {
 
   }
