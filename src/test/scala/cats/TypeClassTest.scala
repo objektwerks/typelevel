@@ -15,9 +15,10 @@ class TypeClassTest extends FunSuite with Matchers {
   }
 
   test("functor") {
-    Functor[List].map( List(1, 2) ) (_ + 1) shouldBe List(2, 3)
-    Functor[List].fproduct( List(1, 2) ) (_ + 1) shouldBe List( (1, 2), (2, 3))
-    Functor[List].fproduct( List(1, 2) ) (_ + 1).toMap shouldBe Map( 1 -> 2, 2 -> 3 )
+    Functor[Id].map( 2 )(_ + 1) shouldBe 3
+    Functor[List].map( List(1, 2) )(_ + 1) shouldBe List(2, 3)
+    Functor[List].fproduct( List(1, 2) )(_ + 1) shouldBe List( (1, 2), (2, 3))
+    Functor[List].fproduct( List(1, 2) )(_ + 1).toMap shouldBe Map( 1 -> 2, 2 -> 3 )
   }
 
   test("apply") {
@@ -29,11 +30,14 @@ class TypeClassTest extends FunSuite with Matchers {
   }
 
   test("applicative") {
+    Applicative[Id].pure(33) shouldBe 33
     Applicative[Option].pure(1) shouldBe Some(1)
     Applicative[List].pure(1) shouldBe List(1)
   }
 
   test("monad") {
+    Monad[Id].map( 2 )(_ + 1) shouldBe 3
+    Monad[Id].flatMap( 2 )(_ + 1) shouldBe 3
     Monad[Option].flatMap( Option(Option(3)) )( x => x ) shouldBe Some(3)
     Monad[List].flatMap( List(1, 2) )( x => List(x + 1) ) shouldBe List(2, 3)
   }
