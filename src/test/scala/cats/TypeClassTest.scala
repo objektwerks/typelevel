@@ -34,6 +34,7 @@ class TypeClassTest extends FunSuite with Matchers {
   }
 
   test("monad") {
+    Monad[Option].flatMap( Option(Option(3)) )( x => x ) shouldBe Some(3)
     Monad[List].flatMap( List(1, 2) )( x => List(x + 1) ) shouldBe List(2, 3)
   }
 }
