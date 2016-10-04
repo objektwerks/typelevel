@@ -1,5 +1,6 @@
-package cats
+package catz
 
+import cats._
 import cats.implicits._
 import org.scalatest.{FunSuite, Matchers}
 
