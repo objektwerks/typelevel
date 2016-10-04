@@ -37,4 +37,12 @@ class TypeClassTest extends FunSuite with Matchers {
     Monad[Option].flatMap( Option(Option(3)) )( x => x ) shouldBe Some(3)
     Monad[List].flatMap( List(1, 2) )( x => List(x + 1) ) shouldBe List(2, 3)
   }
+
+  test("foldable") {
+    Foldable[List].foldLeft( List(1, 2), 0 )(_ + _ ) shouldBe 3
+    Foldable[List].foldRight( List(1, 2), Now(0) )( (x, rest) ⇒ Later(x + rest.value) ).value shouldBe 3
+    Foldable[List].fold( List(1, 2) ) shouldBe 3
+    Foldable[List].foldMap(List("a", "b", "c"))(_.length) shouldBe 3
+    Foldable[List].foldK( List(List(1, 2), List(3, 4) )) shouldBe List(1, 2, 3, 4)
+  }
 }
