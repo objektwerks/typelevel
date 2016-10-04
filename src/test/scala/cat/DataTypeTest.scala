@@ -1,4 +1,4 @@
-package catz
+package cat
 
 import org.scalatest.{FunSuite, Matchers}
 
