@@ -3,6 +3,8 @@ package cats
 import cats.implicits._
 import org.scalatest.{FunSuite, Matchers}
 
+import scala.util.Try
+
 class TypeClassTest extends FunSuite with Matchers {
   test("semigroup") {
     Semigroup[Int].combine(1, 2) shouldBe 3
@@ -29,10 +31,10 @@ class TypeClassTest extends FunSuite with Matchers {
   }
 
   test("applicative") {
-
+    Applicative[Option].pure(1) shouldBe Some(1)
+    Applicative[List].pure(1) shouldBe List(1)
   }
 
   test("monad") {
-
   }
 }
