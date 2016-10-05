@@ -8,6 +8,7 @@ libraryDependencies ++= {
   Seq(
     "org.typelevel" % "cats-core_2.11" % catsVersion,
     "org.typelevel" % "cats-free_2.11" % catsVersion,
+    "com.chuusai" % "shapeless_2.11" % "2.3.2",
     "com.typesafe.scala-logging" % "scala-logging_2.11" % "3.5.0",
     "org.scalatest" % "scalatest_2.11" % "3.0.0" % "test"
   )
