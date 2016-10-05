@@ -5,7 +5,7 @@ import org.scalatest.{FunSuite, Matchers}
 class CatsTest extends FunSuite with Matchers {
   test("semigroup") {
     Semigroup[Int].combine(1, 2) shouldBe 3
-    Option(1) |+| Option(2) shouldBe Some(3)
+    1.some |+| 2.some shouldBe 3.some
   }
 
   test("monoid") {
@@ -21,23 +21,29 @@ class CatsTest extends FunSuite with Matchers {
   }
 
   test("apply") {
+    Apply[Id].ap( { _ + 1 }: Id[Int => Int] ) ( 2 ) shouldBe 3
     val incr: Int => Int = _ + 1
-    Apply[Option].ap(Some(incr)) (Some(1)) shouldBe Some(2)
+    Apply[Option].ap(Some(incr)) (Some(1)) shouldBe 2.some
     val multiply: (Int, Int) => Int = _ * _
-    val options = Option(3) |@| Option(3)
-    options map multiply shouldBe Some(9)
+    val multipliers = 3.some |@| 3.some
+    multipliers map multiply shouldBe 9.some
   }
 
   test("applicative") {
     Applicative[Id].pure(33) shouldBe 33
-    Applicative[Option].pure(1) shouldBe Some(1)
+    Applicative[Option].pure(1) shouldBe 1.some
     Applicative[List].pure(1) shouldBe List(1)
+  }
+
+  test("flatmap") {
+    FlatMap[Id].flatMap(2) { _ + 1 } shouldBe 3
+    2.some flatMap { (x: Int) => (x + 1).some } shouldBe 3.some
   }
 
   test("monad") {
     Monad[Id].map( 2 )(_ + 1) shouldBe 3
     Monad[Id].flatMap( 2 )(_ + 1) shouldBe 3
-    Monad[Option].flatMap( Option(Option(3)) )( x => x ) shouldBe Some(3)
+    Monad[Option].flatMap( Option(Option(3)) )( x => x ) shouldBe 3.some
     Monad[List].flatMap( List(1, 2) )( x => List(x + 1) ) shouldBe List(2, 3)
   }
 
