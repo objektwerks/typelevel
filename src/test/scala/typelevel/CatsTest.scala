@@ -1,3 +1,5 @@
+package typelevel
+
 import cats._
 import cats.implicits._
 import org.scalatest.{FunSuite, Matchers}

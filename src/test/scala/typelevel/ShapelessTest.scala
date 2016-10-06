@@ -1,3 +1,5 @@
+package typelevel
+
 import org.scalatest.{FunSuite, Matchers}
 import shapeless.HNil
 

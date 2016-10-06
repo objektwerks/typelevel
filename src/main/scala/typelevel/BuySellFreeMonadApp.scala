@@ -1,6 +1,8 @@
-import cats.{Id, ~>}
+package typelevel
+
 import cats.free.Free
 import cats.free.Free._
+import cats.{Id, ~>}
 
 object Orders {
   sealed trait Orders[A]

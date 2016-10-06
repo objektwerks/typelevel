@@ -1,3 +1,6 @@
+package typelevel
+
+import cats.free.Free._
 import cats.free._
 import cats.{Id, ~>}
 
@@ -12,8 +15,8 @@ object Interact {
 object InteractDsl {
   import Interact._
 
-  def ask(message: String) : Free[Interact, String] = Free.liftF[Interact, String](Ask(message))
-  def tell(message: String) : Free[Interact, Unit] = Free.liftF[Interact, Unit](Tell(message))
+  def ask(message: String) : Free[Interact, String] = liftF[Interact, String](Ask(message))
+  def tell(message: String) : Free[Interact, Unit] = liftF[Interact, Unit](Tell(message))
 }
 
 object InteractInterpreter {
