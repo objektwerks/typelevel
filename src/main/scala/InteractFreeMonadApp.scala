@@ -4,31 +4,30 @@ import cats.{Id, ~>}
 import scala.io.StdIn._
 
 sealed trait Interact[A]
-case class Ask(prompt: String) extends Interact[String]
-case class Tell(reply: String) extends Interact[Unit]
+case class Ask(message: String) extends Interact[String]
+case class Tell(message: String) extends Interact[Unit]
 
-object InteractionOps {
-
-  def ask(prompt: String) : Free[Interact, String] = Free.liftF[Interact, String](Ask(prompt))
-  def tell(reply: String) : Free[Interact, Unit] = Free.liftF[Interact, Unit](Tell(reply))
+object InteractDsl {
+  def ask(message: String) : Free[Interact, String] = Free.liftF[Interact, String](Ask(message))
+  def tell(message: String) : Free[Interact, Unit] = Free.liftF[Interact, Unit](Tell(message))
 }
 
 object InteractInterpreter {
   def interpreter: Interact ~> Id = new (Interact ~> Id) {
     def apply[A](fa: Interact[A]): Id[A] = fa match {
-      case Ask(prompt) => println(prompt); readLine()
-      case Tell(reply) => println(reply)
+      case Ask(message) => println(message); readLine()
+      case Tell(message) => println(message)
     }
   }
 }
 
 object InteractProgram {
-  import InteractionOps._
+  import InteractDsl._
   import InteractInterpreter._
 
   val program = for {
     person <- ask("What's your name?")
-    _ <- tell(s"Nice to meet you, $person")
+    _ <- tell(s"Nice to meet you, $person!")
   } yield ()
 
   def run(): Id[Unit] = program foldMap interpreter
@@ -37,7 +36,6 @@ object InteractProgram {
 /**
   * Intellij complains of 4 errors, but sbt run works!
   * See: http://www.47deg.com/blog/fp-for-the-average-joe-part3-free-monads
-  * See: http://perevillega.com/understanding-free-monads
   */
 object FreeMonadApp extends App {
   InteractProgram.run()
