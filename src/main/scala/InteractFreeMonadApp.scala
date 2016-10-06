@@ -34,6 +34,10 @@ object InteractProgram {
   def run(): Id[Unit] = program foldMap interpreter
 }
 
+/**
+  * Intellij complains of 4 errors, but sbt run works!
+  * See: http://www.47deg.com/blog/fp-for-the-average-joe-part3-free-monads
+  */
 object FreeMonadApp extends App {
   InteractProgram.run()
 }
