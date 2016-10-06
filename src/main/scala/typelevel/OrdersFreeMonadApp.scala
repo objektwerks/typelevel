@@ -51,6 +51,6 @@ object OrdersProgram {
   * Intellij complains of 4 errors, but sbt run works!
   * See: http://perevillega.com/understanding-free-monads
   */
-object BuySellFreeMonadApp extends App {
+object OrdersFreeMonadApp extends App {
   OrdersProgram.run()
 }
