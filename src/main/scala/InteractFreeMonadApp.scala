@@ -37,6 +37,7 @@ object InteractProgram {
 /**
   * Intellij complains of 4 errors, but sbt run works!
   * See: http://www.47deg.com/blog/fp-for-the-average-joe-part3-free-monads
+  * See: http://perevillega.com/understanding-free-monads
   */
 object FreeMonadApp extends App {
   InteractProgram.run()
