@@ -1,0 +1,4 @@
+
+class FreeMonadApp extends App {
+
+}
