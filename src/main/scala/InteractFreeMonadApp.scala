@@ -3,16 +3,22 @@ import cats.{Id, ~>}
 
 import scala.io.StdIn._
 
-sealed trait Interact[A]
-case class Ask(message: String) extends Interact[String]
-case class Tell(message: String) extends Interact[Unit]
+object Interact {
+  sealed trait Interact[A]
+  case class Ask(message: String) extends Interact[String]
+  case class Tell(message: String) extends Interact[Unit]
+}
 
 object InteractDsl {
+  import Interact._
+
   def ask(message: String) : Free[Interact, String] = Free.liftF[Interact, String](Ask(message))
   def tell(message: String) : Free[Interact, Unit] = Free.liftF[Interact, Unit](Tell(message))
 }
 
 object InteractInterpreter {
+  import Interact._
+
   def interpreter: Interact ~> Id = new (Interact ~> Id) {
     def apply[A](fa: Interact[A]): Id[A] = fa match {
       case Ask(message) => println(message); readLine()
