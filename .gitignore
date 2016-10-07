@@ -1,5 +1,7 @@
 target/
 project/project/
 project/target/
+.ensime
+.ensime_cache/
 .idea
 .DS_Store
