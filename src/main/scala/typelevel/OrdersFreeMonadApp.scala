@@ -1,8 +1,7 @@
 package typelevel
 
 import cats.free.Free
-import cats.free.Free._
-import cats.{Id, ~>}
+import cats._
 
 object Orders {
   sealed trait Orders[A]
@@ -15,8 +14,8 @@ object OrdersDsl {
 
   type OrdersFree[A] = Free[Orders, A]
 
-  def buy(stock: String, amount: Int): OrdersFree[String] = liftF[Orders, String](Buy(stock, amount))
-  def sell(stock: String, amount: Int): OrdersFree[String] = liftF[Orders, String](Sell(stock, amount))
+  def buy(stock: String, amount: Int): OrdersFree[String] = Free.liftF[Orders, String](Buy(stock, amount))
+  def sell(stock: String, amount: Int): OrdersFree[String] = Free.liftF[Orders, String](Sell(stock, amount))
 }
 
 object OrdersInterpreter {

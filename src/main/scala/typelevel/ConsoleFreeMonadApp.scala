@@ -1,8 +1,7 @@
 package typelevel
 
-import cats.free.Free._
-import cats.free._
-import cats.{Id, ~>}
+import cats.free.Free
+import cats._
 
 import scala.io.StdIn._
 
@@ -15,8 +14,8 @@ object Console {
 object ConsoleDsl {
   import Console._
 
-  def prompt(message: String) : Free[Console, String] = liftF[Console, String](Prompt(message))
-  def reply(message: String) : Free[Console, Unit] = liftF[Console, Unit](Reply(message))
+  def prompt(message: String) : Free[Console, String] = Free.liftF[Console, String](Prompt(message))
+  def reply(message: String) : Free[Console, Unit] = Free.liftF[Console, Unit](Reply(message))
 }
 
 object ConsoleInterpreter {
