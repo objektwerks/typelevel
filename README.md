@@ -1,10 +1,10 @@
 Typelevel
 ---------
->The purpose of this project is to prototype and test Typelevel project(s) features.
+>The purpose of this project is to prototype and test features of Typelevel projects.
 
 Warning
 -------
->Intellij is often confused by the typelevel cats library.
+>Intellij is often confused by typelevel libraries.
 
 Test
 ----
@@ -12,6 +12,6 @@ Test
 
 Run
 ---
->To run, select numbered option:
+>Select numbered app:
 
 1. sbt run
