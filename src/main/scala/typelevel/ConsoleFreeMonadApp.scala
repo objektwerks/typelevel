@@ -20,8 +20,6 @@ object Domain {
 object Dsl {
   import Domain._
 
-  type App[A] = Coproduct[Console, Store, A]
-
   class ConsoleDsl[F[_]](implicit I: Inject[Console, F]) {
     def prompt(message: String): Free[F, String] = Free.inject[Console, F](Prompt(message))
     def reply(message: String): Free[F, Unit] = Free.inject[Console, F](Reply(message))
@@ -39,8 +37,7 @@ object Dsl {
 
 object Interpreter {
   import Domain._
-  import Dsl._
-  private val store = mutable.SortedSet[String]()
+  private val store = mutable.ListBuffer[String]()
 
   def consoleInterpreter: Console ~> Id = new (Console ~> Id) {
     def apply[A](c: Console[A]): Id[A] = c match {
@@ -51,17 +48,19 @@ object Interpreter {
 
   def storeInterpreter: Store ~> Id = new (Store ~> Id) {
     def apply[A](s: Store[A]): Id[A] = s match {
-      case Put(value: String) => store += value
+      case Put(value: String) => store.append(value)
       case List() => store.toString
     }
   }
-
-  val interpreter: App ~> Id = consoleInterpreter or storeInterpreter
 }
 
 object Program {
+  import Domain._
   import Dsl._
   import Interpreter._
+
+  type App[A] = Coproduct[Console, Store, A]
+  val interpreter: App ~> Id = consoleInterpreter or storeInterpreter
 
   def program(implicit C: ConsoleDsl[App], S: StoreDsl[App]): Free[App, Unit] = {
     import C._, S._
@@ -74,12 +73,14 @@ object Program {
     } yield ()
   }
 
-  val run = program foldMap interpreter
+  def run() = {
+    program foldMap interpreter
+  }
 }
 
 /**
   * See: http://www.47deg.com/blog/fp-for-the-average-joe-part3-free-monads
   */
 object ConsoleFreeMonadApp extends App {
-  Program.run
+  Program.run()
 }
