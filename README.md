@@ -4,7 +4,7 @@ Typelevel
 
 Warning
 -------
->Intellij is often confused by typelevel libraries.
+>Atom/Ensime, Eclipse and Intellij are all confused by Typelevel libraries. Sbt is your only friend.
 
 Test
 ----
