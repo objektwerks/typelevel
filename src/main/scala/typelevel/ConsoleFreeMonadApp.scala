@@ -48,8 +48,8 @@ object Interpreter {
 
   def storeInterpreter: Store ~> Id = new (Store ~> Id) {
     def apply[A](s: Store[A]): Id[A] = s match {
-      case Put(value: String) => store.append(value)
-      case List() => store.toString
+      case Put(value: String) => store.prepend(value)
+      case List() => store.mkString(",")
     }
   }
 }
@@ -67,8 +67,7 @@ object Program {
     for {
       value <- prompt("Value?")
       _ <- put(value)
-      _ <- reply(s"Values...")
-      values <- list()
+      _ <- reply(s"Values...${list()}")
       _ <- reply(s"Thank you!")
     } yield ()
   }
