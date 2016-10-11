@@ -67,7 +67,8 @@ object Program {
     for {
       value <- prompt("Value?")
       _ <- put(value)
-      _ <- reply(s"Values...${list()}")
+      values <- list()
+      _ <- reply(values)
       _ <- reply(s"Thank you!")
     } yield ()
   }
