@@ -69,7 +69,7 @@ object Program {
       _ <- put(value)
       values <- list()
       _ <- reply(values)
-      _ <- reply(s"value stored.")
+      _ <- reply(s"values stored: $values")
     } yield ()
   }
 
