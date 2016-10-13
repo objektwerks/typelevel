@@ -65,11 +65,11 @@ object Program {
   def program(implicit C: ConsoleDsl[App], S: StoreDsl[App]): Free[App, Unit] = {
     import C._, S._
     for {
-      value <- prompt("Value?")
+      value <- prompt("Enter value:")
       _ <- put(value)
       values <- list()
       _ <- reply(values)
-      _ <- reply(s"Thank you!")
+      _ <- reply(s"value stored.")
     } yield ()
   }
 
