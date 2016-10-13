@@ -68,7 +68,6 @@ object Program {
       value <- prompt("Enter value:")
       _ <- put(value)
       values <- list()
-      _ <- reply(values)
       _ <- reply(s"values stored: $values")
     } yield ()
   }
