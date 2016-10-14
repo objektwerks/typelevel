@@ -8,7 +8,7 @@ import org.scalatest.{FunSuite, Matchers}
 
 class CatsTest extends FunSuite with Matchers {
   test("eq") {
-    1 === 1 shouldBe true
+    1 === 1 shouldBe false
     1 === "a" shouldBe false
   }
   
