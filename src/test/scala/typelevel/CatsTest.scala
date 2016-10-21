@@ -25,7 +25,7 @@ class CatsTest extends FunSuite with Matchers {
   test("functor") {
     Functor[Id].map( 2 )(_ + 1) shouldBe 3
     Functor[List].map( List(1, 2) )(_ + 1) shouldBe List(2, 3)
-    Functor[List].fproduct( List(1, 2) )(_ + 1) shouldBe List( (1, 2), (2, 3))
+    Functor[List].fproduct( List(1, 2) )(_ + 1) shouldBe List( (1, 2), (2, 3) )
     Functor[List].fproduct( List(1, 2) )(_ + 1).toMap shouldBe Map( 1 -> 2, 2 -> 3 )
   }
 
