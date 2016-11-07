@@ -2,16 +2,10 @@ package typelevel
 
 import cats._
 import cats.implicits._
-import cats.syntax.eq._
 
 import org.scalatest.{FunSuite, Matchers}
 
-class CatsTest extends FunSuite with Matchers {
-  test("eq") {
-    1 === 1 shouldBe true
-    1 === "a" shouldBe false
-  }
-  
+class CatsTest extends FunSuite with Matchers {  
   test("semigroup") {
     Semigroup[Int].combine(1, 2) shouldBe 3
     1.some |+| 2.some shouldBe 3.some
