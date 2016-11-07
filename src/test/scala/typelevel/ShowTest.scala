@@ -10,4 +10,11 @@ class ShowTest extends FunSuite {
     val showInt = Show[Int]
     assert(showInt.show(1) == "1")
   }
+  
+  test("syntax") {
+    import cats.instances.int._
+    import cats.syntax.show._
+    
+    assert(1.show == "1")
+  }
 }
