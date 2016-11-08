@@ -17,7 +17,7 @@ class MonoidTest extends FunSuite {
   
   test("syntax") {
     import cats.Monoid
-    import cats.syntax.semigroup._
+    import cats.syntax.monoid._
     import cats.instances.int._
     
     val x = 1 |+| 2 |+| Monoid[Int].empty
