@@ -2,6 +2,16 @@ package typelevel
 
 import org.scalatest.FunSuite
 
+case class Amount(value: Double)
+
+object Amount {
+  import cats.Monoid
+  implicit val amountMonoid: Monoid[Amount] = new Monoid[Amount] {
+    def empty: Amount = Amount(0)
+    def combine(x: Amount, y: Amount): Amount = Amount(x.value + y.value)  
+  }
+}
+
 class MonoidTest extends FunSuite {
   test("instances") {
     import cats.Semigroup
@@ -22,5 +32,12 @@ class MonoidTest extends FunSuite {
     
     val x = 1 |+| 2 |+| Monoid[Int].empty
     assert(x == 3)
+  }
+  
+  test("custom") {
+    import cats.syntax.monoid._
+    
+    val amount = Amount(1) |+| Amount(2)
+    assert(amount == Amount(3))
   }
 }
