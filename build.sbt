@@ -1,16 +1,16 @@
 name := "typelevel"
 organization := "objektwerks"
 version := "0.1-SNAPSHOT"
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.0"
 ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
 libraryDependencies ++= {
-  val catsVersion = "0.8.0"
+  val catsVersion = "0.8.1"
   Seq(
-    "org.typelevel" % "cats-core_2.11" % catsVersion,
-    "org.typelevel" % "cats-free_2.11" % catsVersion,
-    "com.chuusai" % "shapeless_2.11" % "2.3.2",
-    "com.typesafe.scala-logging" % "scala-logging_2.11" % "3.5.0",
-    "org.scalatest" % "scalatest_2.11" % "3.0.0" % "test"
+    "org.typelevel" % "cats-core_2.12" % catsVersion,
+    "org.typelevel" % "cats-free_2.12" % catsVersion,
+    "com.chuusai" % "shapeless_2.12" % "2.3.2",
+    "com.typesafe.scala-logging" % "scala-logging_2.12" % "3.5.0",
+    "org.scalatest" % "scalatest_2.12" % "3.0.0" % "test"
   )
 }
 scalacOptions ++= Seq(
