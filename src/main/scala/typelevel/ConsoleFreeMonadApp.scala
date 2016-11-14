@@ -1,12 +1,5 @@
 package typelevel
 
-import cats._
-import cats.data._
-import cats.free._
-
-import scala.io.StdIn._
-import scala.collection.mutable
-
 object Domain {
   sealed trait Console[A]
   case class Prompt(message: String) extends Console[String]
@@ -18,6 +11,7 @@ object Domain {
 }
 
 object Dsl {
+  import cats.free.{Free, Inject}
   import Domain._
 
   class ConsoleDsl[F[_]](implicit I: Inject[Console, F]) {
@@ -36,6 +30,9 @@ object Dsl {
 }
 
 object Interpreter {
+  import scala.io.StdIn._
+  import scala.collection.mutable
+  import cats.{Id, ~>}
   import Domain._
   private val store = mutable.ListBuffer[String]()
 
@@ -55,6 +52,9 @@ object Interpreter {
 }
 
 object Program {
+  import cats.{Id, ~>}
+  import cats.data.Coproduct
+  import cats.free.Free
   import Domain._
   import Dsl._
   import Interpreter._

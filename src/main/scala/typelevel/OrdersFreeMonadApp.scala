@@ -1,8 +1,5 @@
 package typelevel
 
-import cats.free.Free
-import cats._
-
 object Orders {
   sealed trait Orders[A]
   case class Buy(stock: String, amount: Int) extends Orders[String]
@@ -10,6 +7,7 @@ object Orders {
 }
 
 object OrdersDsl {
+  import cats.free.Free
   import Orders._
 
   type OrdersFree[A] = Free[Orders, A]
@@ -19,6 +17,7 @@ object OrdersDsl {
 }
 
 object OrdersInterpreter {
+  import cats.{Id, ~>}
   import Orders._
 
   def interpreter: Orders ~> Id = new (Orders ~> Id) {
@@ -34,6 +33,7 @@ object OrdersInterpreter {
 }
 
 object OrdersProgram {
+  import cats.Id
   import OrdersDsl._
   import OrdersInterpreter._
 
