@@ -24,7 +24,7 @@ object OrdersInterpreter {
   import Orders._
 
   def interpreter: Orders ~> Id = new (Orders ~> Id) {
-    def apply[A](fa: Orders[A]): Id[A] = fa match {
+    def apply[A](order: Orders[A]): Id[A] = order match {
       case Buy(stock, amount) =>
         println(s"Buying $amount of $stock")
         "ok"
