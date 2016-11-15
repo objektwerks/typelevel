@@ -1,9 +1,12 @@
 package typelevel
 
 object Orders {
+  type Symbol = String
+  type Amount = Double
+  type Response = String
   sealed trait Orders[A]
-  case class Buy(stock: String, amount: Int) extends Orders[String]
-  case class Sell(stock: String, amount: Int) extends Orders[String]
+  case class Buy(stock: Symbol, amount: Amount) extends Orders[Response]
+  case class Sell(stock: Symbol, amount: Amount) extends Orders[Response]
 }
 
 object OrdersDsl {
@@ -12,8 +15,8 @@ object OrdersDsl {
 
   type OrdersFree[A] = Free[Orders, A]
 
-  def buy(stock: String, amount: Int): OrdersFree[String] = Free.liftF[Orders, String](Buy(stock, amount))
-  def sell(stock: String, amount: Int): OrdersFree[String] = Free.liftF[Orders, String](Sell(stock, amount))
+  def buy(stock: Symbol, amount: Amount): OrdersFree[Response] = Free.liftF[Orders, Response](Buy(stock, amount))
+  def sell(stock: Symbol, amount: Amount): OrdersFree[Response] = Free.liftF[Orders, Response](Sell(stock, amount))
 }
 
 object OrdersInterpreter {
@@ -38,9 +41,9 @@ object OrdersProgram {
   import OrdersInterpreter._
 
   val program = for {
-    _ <- buy("APPL", 100)
-    _ <- buy("MSFT", 10)
-    response <- sell("GOOG", 110)
+    _ <- buy("APPL", 100.0)
+    _ <- buy("MSFT", 10.0)
+    response <- sell("GOOG", 110.0)
   } yield response
 
   def run(): Id[Unit] = program foldMap interpreter
