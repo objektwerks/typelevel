@@ -25,11 +25,14 @@ class ValidatedTest extends FunSuite {
 
   test("methods") {
     import cats.data.Validated
+    import cats.syntax.validated._
+    import cats.data.Validated.Valid
 
     assert(Validated.catchOnly[NumberFormatException]("three".toInt) isInvalid)
     assert(Validated.catchNonFatal(sys.error("Nonfatal")) isInvalid)
     assert(Validated.fromTry(scala.util.Try("three".toInt)) isInvalid)
     assert(Validated.fromEither[String, Int](Left("Error")) isInvalid)
     assert(Validated.fromOption[String, Int](None, "Error") isInvalid)
+    assert(3.valid.map(_ * 3) == Valid(9))
   }
 }
