@@ -1,8 +1,8 @@
 package objektwerks.monix
 
 import monix.eval.Task
-import org.scalatest.{FunSuite, Matchers}
 import monix.execution.Scheduler.Implicits.global
+import org.scalatest.{FunSuite, Matchers}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
