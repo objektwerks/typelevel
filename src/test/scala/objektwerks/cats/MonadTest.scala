@@ -1,4 +1,4 @@
-package typelevel
+package objektwerks.cats
 
 import org.scalatest.FunSuite
 
@@ -14,10 +14,10 @@ class MonadTest extends FunSuite {
   }
 
   test("syntax") {
+    import cats.instances.list._
     import cats.instances.option._
     import cats.syntax.applicative._
     import cats.syntax.option._
-    import cats.instances.list._
 
     assert(3.pure[Option] == 3.some)
     assert(3.pure[List] == List(3))

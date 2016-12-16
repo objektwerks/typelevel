@@ -1,4 +1,4 @@
-package typelevel
+package objektwerks.validated
 
 import org.scalatest.FunSuite
 

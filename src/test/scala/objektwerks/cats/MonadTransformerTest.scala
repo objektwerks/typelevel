@@ -1,4 +1,4 @@
-package typelevel
+package objektwerks.cats
 
 import org.scalatest.FunSuite
 

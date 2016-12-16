@@ -1,4 +1,4 @@
-package typelevel
+package objektwerks.shapeless
 
 import org.scalatest.{FunSuite, Matchers}
 import shapeless.HNil

@@ -1,4 +1,4 @@
-package typelevel
+package objektwerks.cats
 
 object Orders {
   type Symbol = String
@@ -10,8 +10,8 @@ object Orders {
 }
 
 object OrdersDsl {
-  import cats.free.Free
   import Orders._
+  import cats.free.Free
 
   type OrdersFree[A] = Free[Orders, A]
 
@@ -20,8 +20,8 @@ object OrdersDsl {
 }
 
 object OrdersInterpreter {
-  import cats.{Id, ~>}
   import Orders._
+  import cats.{Id, ~>}
 
   def interpreter: Orders ~> Id = new (Orders ~> Id) {
     def apply[A](order: Orders[A]): Id[A] = order match {
@@ -36,9 +36,9 @@ object OrdersInterpreter {
 }
 
 object OrdersProgram {
-  import cats.Id
   import OrdersDsl._
   import OrdersInterpreter._
+  import cats.Id
 
   val program = for {
     _ <- buy("APPL", 100.0)

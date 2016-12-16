@@ -1,4 +1,4 @@
-package typelevel
+package objektwerks.cats
 
 object Domain {
   sealed trait Console[A]
@@ -11,8 +11,8 @@ object Domain {
 }
 
 object Dsl {
-  import cats.free.{Free, Inject}
   import Domain._
+  import cats.free.{Free, Inject}
 
   class ConsoleDsl[F[_]](implicit I: Inject[Console, F]) {
     def prompt(message: String): Free[F, String] = Free.inject[Console, F](Prompt(message))
@@ -30,10 +30,11 @@ object Dsl {
 }
 
 object Interpreter {
-  import scala.io.StdIn._
-  import scala.collection.mutable
-  import cats.{Id, ~>}
   import Domain._
+  import cats.{Id, ~>}
+
+  import scala.collection.mutable
+  import scala.io.StdIn._
   private val store = mutable.ListBuffer[String]()
 
   def consoleInterpreter: Console ~> Id = new (Console ~> Id) {
@@ -52,18 +53,19 @@ object Interpreter {
 }
 
 object Program {
-  import cats.{Id, ~>}
-  import cats.data.Coproduct
-  import cats.free.Free
   import Domain._
   import Dsl._
   import Interpreter._
+  import cats.data.Coproduct
+  import cats.free.Free
+  import cats.{Id, ~>}
 
   type App[A] = Coproduct[Console, Store, A]
   val interpreter: App ~> Id = consoleInterpreter or storeInterpreter
 
   def program(implicit C: ConsoleDsl[App], S: StoreDsl[App]): Free[App, Unit] = {
-    import C._, S._
+    import C._
+    import S._
     for {
       value <- prompt("Enter value:")
       _ <- put(value)

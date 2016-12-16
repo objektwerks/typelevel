@@ -1,4 +1,4 @@
-package typelevel
+package objektwerks.cats
 
 import org.scalatest.FunSuite
 
@@ -14,11 +14,10 @@ object Amount {
 
 class MonoidTest extends FunSuite {
   test("instances") {
-    import cats.Semigroup
-    import cats.Monoid
     import cats.instances.int._
     import cats.instances.option._
     import cats.syntax.option._
+    import cats.{Monoid, Semigroup}
     
     assert(Semigroup[Int].combine(1, 2) == 3)
     assert(Monoid[Int].combine(1, 2) == 3)
@@ -27,8 +26,8 @@ class MonoidTest extends FunSuite {
   
   test("syntax") {
     import cats.Monoid
-    import cats.syntax.monoid._
     import cats.instances.int._
+    import cats.syntax.monoid._
     
     val x = 1 |+| 2 |+| Monoid[Int].empty
     assert(x == 3)
