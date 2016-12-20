@@ -15,7 +15,7 @@ class MonixTest extends FunSuite with Matchers {
     Await.result(future, 100.millis) shouldBe 3
   }
 
-  test("observable") {
+  test("observable task") {
     val task = {
       Observable.interval(1.second)
         .filter(_ % 2 == 0)
