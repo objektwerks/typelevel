@@ -5,11 +5,15 @@ scalaVersion := "2.12.1"
 ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
 libraryDependencies ++= {
   val catsVersion = "0.8.1"
+  val doobieVersion = "0.4.0"
   Seq(
     "org.typelevel" % "cats-core_2.12" % catsVersion,
     "org.typelevel" % "cats-free_2.12" % catsVersion,
     "io.monix" % "monix_2.12" % "2.1.1",
     "com.chuusai" % "shapeless_2.12" % "2.3.2",
+    "org.tpolecat" % "doobie-core-cats_2.12" % doobieVersion,
+    "org.tpolecat" % "doobie-h2-cats_2.12" % doobieVersion,
+    "com.h2database" % "h2" % "1.4.193",
     "com.typesafe.scala-logging" % "scala-logging_2.12" % "3.5.0",
     "org.scalatest" % "scalatest_2.12" % "3.0.0" % "test"
   )
