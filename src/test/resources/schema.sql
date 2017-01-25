@@ -6,6 +6,7 @@ create table worker (
 );
 create table task (
   id int primary key not null,
+  workerId int not null,
   task varchar(128) not null,
-  foreign key ( worker_id ) references worker ( id )
+  foreign key(workerId) references worker(id)
 );
