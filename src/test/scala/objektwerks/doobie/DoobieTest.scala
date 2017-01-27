@@ -26,7 +26,7 @@ class DoobieTest extends FunSuite with Matchers {
 
   test("file ddl") {
     val schema = Source.fromInputStream(getClass.getResourceAsStream("/schema.sql")).mkString
-    val ddl: Update0 = sql"$schema".update
+    val ddl: Update0 = Fragment.const(schema).update
     ddl.run.transact(db).unsafePerformIO
   }
 }
