@@ -1,5 +1,6 @@
 package objektwerks.doobie
 
+import cats.implicits._
 import doobie.imports._
 import org.scalatest.{FunSuite, Matchers}
 
@@ -10,11 +11,21 @@ case class Worker(id: Int = 0, name: String)
 case class Task(id: Int = 0, workerId: Int, task: String)
 
 class DoobieTest extends FunSuite with Matchers {
-  val db = DriverManagerTransactor[IOLite]( "org.h2.Driver", "jdbc:h2:mem:test", "", "" )
+  val db = DriverManagerTransactor[IOLite]( "org.h2.Driver", "jdbc:h2:./target/testdb", "", "" )
 
   test("ddl") {
     val schema = Source.fromInputStream(getClass.getResourceAsStream("/schema.sql")).mkString
     val ddl: Update0 = Fragment.const(schema).update
     ddl.run.transact(db).unsafePerformIO
+  }
+
+  test("insert") {
+    val barney = Fragment.const("insert into worker(name) values ('barney')").update
+    val fred = Fragment.const("insert into worker(name) values('fred')").update
+    (barney.run *> fred.run).transact(db).unsafePerformIO
+
+    val barneyTask = Fragment.const("insert into task(workerId, task) values(1, 'clean pool')").update
+    val fredTask = Fragment.const("insert into task(workerId, task) values(2, 'clean pool')").update
+    (barneyTask.run *> fredTask.run).transact(db).unsafePerformIO
   }
 }
