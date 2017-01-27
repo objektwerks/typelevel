@@ -15,11 +15,11 @@ class DoobieTest extends FunSuite with Matchers {
 
   test("ddl") {
     val schema = Source.fromInputStream(getClass.getResourceAsStream("/schema.sql")).mkString
-    val ddl: Update0 = Fragment.const(schema).update
+    val ddl = Fragment.const(schema).update
     ddl.run.transact(db).unsafePerformIO
   }
 
-  test("insert") {
+  test("update > query") {
     val barney = Fragment.const("insert into worker(name) values ('barney')").update
     val fred = Fragment.const("insert into worker(name) values('fred')").update
     (barney.run *> fred.run).transact(db).unsafePerformIO
@@ -27,5 +27,10 @@ class DoobieTest extends FunSuite with Matchers {
     val barneyTask = Fragment.const("insert into task(workerId, task) values(1, 'clean pool')").update
     val fredTask = Fragment.const("insert into task(workerId, task) values(2, 'clean pool')").update
     (barneyTask.run *> fredTask.run).transact(db).unsafePerformIO
+
+    val workers = Fragment.const("select * from worker").query[Worker]
+    val tasks = Fragment.const("select * from task").query[Task]
+    workers.list.transact(db).unsafePerformIO.length shouldBe 2
+    tasks.list.transact(db).unsafePerformIO.length shouldBe 2
   }
 }
