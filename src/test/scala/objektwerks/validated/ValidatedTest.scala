@@ -1,17 +1,17 @@
 package objektwerks.validated
 
-import org.scalatest.FunSuite
+import org.scalatest.{FunSuite, Matchers}
 
-class ValidatedTest extends FunSuite {
+class ValidatedTest extends FunSuite with Matchers {
   test("instances") {
     import cats.data.Validated
     import cats.data.Validated.Valid
     import cats.data.Validated.Invalid
 
-    assert(Validated.Valid(3) == Valid(3))
-    assert(Validated.Invalid("three") == Invalid("three"))
-    assert(Validated.valid[String, Int](3) == Valid(3))
-    assert(Validated.invalid[String, Int]("three") == Invalid("three"))
+    Validated.Valid(3) shouldEqual Valid(3)
+    Validated.Invalid("three") shouldEqual Invalid("three")
+    Validated.valid[String, Int](3) shouldEqual Valid(3)
+    Validated.invalid[String, Int]("three") shouldEqual Invalid("three")
   }
 
   test("syntax") {
@@ -19,8 +19,8 @@ class ValidatedTest extends FunSuite {
     import cats.data.Validated.Valid
     import cats.data.Validated.Invalid
 
-    assert(3.valid[String] == Valid(3))
-    assert("three".invalid[Int] == Invalid("three"))
+    3.valid[String] shouldEqual Valid(3)
+    "three".invalid[Int] shouldEqual Invalid("three")
   }
 
   test("methods") {
@@ -28,11 +28,11 @@ class ValidatedTest extends FunSuite {
     import cats.syntax.validated._
     import cats.data.Validated.Valid
 
-    assert(Validated.catchOnly[NumberFormatException]("three".toInt) isInvalid)
-    assert(Validated.catchNonFatal(sys.error("Nonfatal")) isInvalid)
-    assert(Validated.fromTry(scala.util.Try("three".toInt)) isInvalid)
-    assert(Validated.fromEither[String, Int](Left("Error")) isInvalid)
-    assert(Validated.fromOption[String, Int](None, "Error") isInvalid)
-    assert(3.valid.map(_ * 3) == Valid(9))
+    Validated.catchOnly[NumberFormatException]("three".toInt).isInvalid shouldBe true
+    Validated.catchNonFatal(sys.error("Nonfatal")).isInvalid shouldBe true
+    Validated.fromTry(scala.util.Try("three".toInt)).isInvalid shouldBe true
+    Validated.fromEither[String, Int](Left("Error")).isInvalid shouldBe true
+    Validated.fromOption[String, Int](None, "Error").isInvalid shouldBe true
+    3.valid.map(_ * 3) shouldEqual Valid(9)
   }
 }
