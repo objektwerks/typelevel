@@ -9,7 +9,7 @@ libraryDependencies ++= {
   Seq(
     "org.typelevel" % "cats-core_2.12" % catsVersion,
     "org.typelevel" % "cats-free_2.12" % catsVersion,
-    "io.monix" % "monix_2.12" % "2.1.2",
+    "io.monix" % "monix_2.12" % "2.2.2",
     "com.chuusai" % "shapeless_2.12" % "2.3.2",
     "org.tpolecat" % "doobie-core-cats_2.12" % doobieVersion,
     "org.tpolecat" % "doobie-h2-cats_2.12" % doobieVersion,
