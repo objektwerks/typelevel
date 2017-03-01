@@ -1,15 +1,15 @@
 package objektwerks.cats
 
-import org.scalatest.FunSuite
+import org.scalatest.{FunSuite, Matchers}
 
-class FunctorTest extends FunSuite {
+class FunctorTest extends FunSuite with Matchers {
   test("instances") {
     import cats.Functor
     import cats.instances.list._
     
     val list = List(1, 2)
     val result = Functor[List].map(list)(_ * 1)
-    assert(list === result)
+    list shouldEqual result
   }
   
   test("lift") {
@@ -19,7 +19,7 @@ class FunctorTest extends FunSuite {
     
     val double = (x: Int) => x * x
     val lifted = Functor[Option].lift(double)
-    assert(lifted(3.some) == 9.some)
+    lifted(3.some) shouldEqual 9.some
   }
   
   test("syntax") {
@@ -30,6 +30,6 @@ class FunctorTest extends FunSuite {
     val triple = (x: Int) => x * x * x
     val combo = double.map(triple)
     
-    assert(combo(3) == 729)
+    combo(3) shouldEqual 729
   }
 }

@@ -1,6 +1,6 @@
 package objektwerks.cats
 
-import org.scalatest.FunSuite
+import org.scalatest.{FunSuite, Matchers}
 
 case class Actor(name: String)
 
@@ -9,25 +9,26 @@ object Actor {
   implicit val actorShow: Show[Actor] = Show.show[Actor](_.name)
 }
 
-class ShowTest extends FunSuite {
+class ShowTest extends FunSuite with Matchers {
   test("instances") {
     import cats.Show
     import cats.instances.int._
     
     val showInt = Show[Int]
-    assert(showInt.show(1) == "1")
+    showInt.show(1) shouldEqual "1"
   }
   
   test("syntax") {
     import cats.instances.int._
     import cats.syntax.show._
     
-    assert(1.show == "1")
+    1.show shouldEqual "1"
   }
   
   test("custom") {
     import cats.syntax.show._
+    
     val actor = Actor("Fred Flintstone")
-    assert(actor.show == "Fred Flintstone")
+    actor.show shouldEqual "Fred Flintstone"
   }
 }

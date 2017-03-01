@@ -1,15 +1,15 @@
 package objektwerks.cats
 
-import org.scalatest.FunSuite
+import org.scalatest.{FunSuite, Matchers}
 
-// Can't test === and =!= due to Scalatest conflict.
-class EqTest extends FunSuite {
+// Unable to test === and =!= due to conflict with Scalatest.
+class EqTest extends FunSuite with Matchers {
   test("instances") {
     import cats.Eq
     import cats.instances.int._
 
     val eqInt = Eq[Int]
-    assert(eqInt.eqv(1, 1))
-    assert(eqInt.neqv(1, 2))
+    eqInt.eqv(1, 1) shouldBe true
+    eqInt.neqv(1, 2) shouldBe true
   }
 }

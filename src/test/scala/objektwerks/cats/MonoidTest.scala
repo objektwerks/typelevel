@@ -1,6 +1,6 @@
 package objektwerks.cats
 
-import org.scalatest.FunSuite
+import org.scalatest.{FunSuite, Matchers}
 
 case class Amount(value: Double)
 
@@ -12,16 +12,16 @@ object Amount {
   }
 }
 
-class MonoidTest extends FunSuite {
+class MonoidTest extends FunSuite with Matchers {
   test("instances") {
     import cats.instances.int._
     import cats.instances.option._
     import cats.syntax.option._
     import cats.{Monoid, Semigroup}
     
-    assert(Semigroup[Int].combine(1, 2) == 3)
-    assert(Monoid[Int].combine(1, 2) == 3)
-    assert(Monoid[Option[Int]].combine(1.some, 2.some) == 3.some)
+    Semigroup[Int].combine(1, 2) shouldEqual 3
+    Monoid[Int].combine(1, 2) shouldEqual 3
+    Monoid[Option[Int]].combine(1.some, 2.some) shouldEqual 3.some
   }
   
   test("syntax") {
@@ -30,13 +30,13 @@ class MonoidTest extends FunSuite {
     import cats.syntax.monoid._
     
     val x = 1 |+| 2 |+| Monoid[Int].empty
-    assert(x == 3)
+    x shouldEqual 3
   }
   
   test("custom") {
     import cats.syntax.monoid._
     
     val amount = Amount(1) |+| Amount(2)
-    assert(amount == Amount(3))
+    amount shouldEqual Amount(3)
   }
 }

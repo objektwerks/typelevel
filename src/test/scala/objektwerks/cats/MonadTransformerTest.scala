@@ -1,8 +1,8 @@
 package objektwerks.cats
 
-import org.scalatest.FunSuite
+import org.scalatest.{FunSuite, Matchers}
 
-class MonadTransformerTest extends FunSuite {
+class MonadTransformerTest extends FunSuite with Matchers {
   test("transform") {
     import cats.data.OptionT
     import cats.instances.list._
@@ -11,6 +11,6 @@ class MonadTransformerTest extends FunSuite {
 
     type ListOption[A] = OptionT[List, A]
     val result: ListOption[Int] = 3.pure[ListOption]
-    assert(result.value == List(3.some))
+    result.value shouldEqual List(3.some)
   }
 }

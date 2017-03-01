@@ -1,16 +1,16 @@
 package objektwerks.cats
 
-import org.scalatest.FunSuite
+import org.scalatest.{FunSuite, Matchers}
 
-class MonadTest extends FunSuite {
+class MonadTest extends FunSuite with Matchers {
   test("instances") {
     import cats.Monad
     import cats.instances.option._
     import cats.syntax.option._
 
-    assert(Monad[Option].pure(3) == 3.some)
-    assert(Monad[Option].map(3.some)(n => n * 3) == 9.some)
-    assert(Monad[Option].flatMap(3.some)(n => (n * 3).some) == 9.some)
+    Monad[Option].pure(3) shouldEqual 3.some
+    Monad[Option].map(3.some)(n => n * 3) shouldEqual 9.some
+    Monad[Option].flatMap(3.some)(n => (n * 3).some) shouldEqual 9.some
   }
 
   test("syntax") {
@@ -19,7 +19,7 @@ class MonadTest extends FunSuite {
     import cats.syntax.applicative._
     import cats.syntax.option._
 
-    assert(3.pure[Option] == 3.some)
-    assert(3.pure[List] == List(3))
+    3.pure[Option] shouldEqual 3.some
+    3.pure[List] shouldEqual List(3)
   }
 }
