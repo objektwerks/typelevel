@@ -9,13 +9,13 @@ libraryDependencies ++= {
   Seq(
     "org.typelevel" % "cats-core_2.12" % catsVersion,
     "org.typelevel" % "cats-free_2.12" % catsVersion,
-    "io.monix" % "monix_2.12" % "2.2.2",
+    "io.monix" % "monix_2.12" % "2.3.2",
     "com.chuusai" % "shapeless_2.12" % "2.3.2",
     "org.tpolecat" % "doobie-core-cats_2.12" % doobieVersion,
     "org.tpolecat" % "doobie-h2-cats_2.12" % doobieVersion,
-    "com.h2database" % "h2" % "1.4.193",
+    "com.h2database" % "h2" % "1.4.196",
     "com.typesafe.scala-logging" % "scala-logging_2.12" % "3.5.0",
-    "org.scalatest" % "scalatest_2.12" % "3.0.1" % "test"
+    "org.scalatest" % "scalatest_2.12" % "3.0.3" % "test"
   )
 }
 scalacOptions ++= Seq(
