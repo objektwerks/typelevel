@@ -6,15 +6,24 @@ import monix.reactive.Observable
 import org.scalatest.{FunSuite, Matchers}
 
 import scala.concurrent.duration._
+import scala.util.{Failure, Success}
 
 class TaskTest extends FunSuite with Matchers {
-  test("async task") {
+  test("run async task") {
     val task = Task { 1 + 2 }
     val cancelable = task.runAsync
     cancelable.onComplete(x => x.get shouldBe 3)
   }
 
-  test("observable task") {
+  test("run on complete task") {
+    val task = Task { 1 + 2 }
+    task.runOnComplete {
+      case Success(sum) => sum shouldBe 3
+      case Failure(failure) => throw failure
+    }
+  }
+
+  test("run async observable task") {
     val task = {
       Observable.interval(1.second)
         .filter(_ % 2 == 0)
