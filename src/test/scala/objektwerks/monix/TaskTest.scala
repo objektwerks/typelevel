@@ -35,4 +35,13 @@ class TaskTest extends FunSuite with Matchers {
     val cancelable = task.runAsync
     cancelable.onComplete(xs => xs.get.sum shouldBe 4)
   }
+
+  test("coeval task") {
+    val task = Task.eval{ 1 + 2 }
+    val evaluating = task.coeval
+    evaluating.value match {
+      case Left(_) => throw new IllegalArgumentException("coeval task failed")
+      case Right(sum) => sum shouldBe 3
+    }
+  }
 }
