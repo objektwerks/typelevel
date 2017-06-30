@@ -5,14 +5,13 @@ import monix.execution.Scheduler.Implicits.global
 import monix.reactive.Observable
 import org.scalatest.{FunSuite, Matchers}
 
-import scala.concurrent.Await
 import scala.concurrent.duration._
 
 class TaskTest extends FunSuite with Matchers {
-  test("task") {
+  test("async task") {
     val task = Task { 1 + 2 }
-    val future = task.runAsync
-    Await.result(future, 100.millis) shouldBe 3
+    val cancelable = task.runAsync
+    cancelable.onComplete(x => x.get shouldBe 3)
   }
 
   test("observable task") {
@@ -24,7 +23,7 @@ class TaskTest extends FunSuite with Matchers {
         .take(3)
         .toListL
     }
-    val future = task.runAsync
-    Await.result(future, 3 seconds).sum shouldBe 4
+    val cancelable = task.runAsync
+    cancelable.onComplete(xs => xs.get.sum shouldBe 4)
   }
 }
