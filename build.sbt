@@ -1,8 +1,7 @@
 name := "typelevel"
 organization := "objektwerks"
 version := "0.1-SNAPSHOT"
-scalaVersion := "2.12.2"
-ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
+scalaVersion := "2.12.3"
 libraryDependencies ++= {
   val catsVersion = "0.9.0"
   val doobieVersion = "0.4.1"
