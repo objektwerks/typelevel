@@ -40,7 +40,7 @@ object OrdersProgram {
   import OrdersInterpreter._
   import cats.Id
 
-  val program = for {
+  private val program = for {
     _ <- buy("APPL", 100.0)
     _ <- buy("MSFT", 10.0)
     response <- sell("GOOG", 110.0)

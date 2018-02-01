@@ -1,5 +1,8 @@
 package objektwerks.cats
 
+import cats.Inject
+import shapeless.Coproduct
+
 object Domain {
   sealed trait Console[A]
   case class Prompt(message: String) extends Console[String]
@@ -12,7 +15,7 @@ object Domain {
 
 object Dsl {
   import Domain._
-  import cats.free.{Free, Inject}
+  import cats.free.Free
 
   class ConsoleDsl[F[_]](implicit I: Inject[Console, F]) {
     def prompt(message: String): Free[F, String] = Free.inject[Console, F](Prompt(message))
@@ -56,7 +59,6 @@ object Program {
   import Domain._
   import Dsl._
   import Interpreter._
-  import cats.data.Coproduct
   import cats.free.Free
   import cats.{Id, ~>}
 
