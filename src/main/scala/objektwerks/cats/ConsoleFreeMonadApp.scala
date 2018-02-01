@@ -1,7 +1,11 @@
 package objektwerks.cats
 
-import cats.Inject
+import cats.free.Free
+import cats.{Id, Inject, ~>}
 import shapeless.Coproduct
+
+import scala.collection.mutable
+import scala.io.StdIn._
 
 object Domain {
   sealed trait Console[A]
@@ -15,7 +19,6 @@ object Domain {
 
 object Dsl {
   import Domain._
-  import cats.free.Free
 
   class ConsoleDsl[F[_]](implicit I: Inject[Console, F]) {
     def prompt(message: String): Free[F, String] = Free.inject[Console, F](Prompt(message))
@@ -34,10 +37,7 @@ object Dsl {
 
 object Interpreter {
   import Domain._
-  import cats.{Id, ~>}
 
-  import scala.collection.mutable
-  import scala.io.StdIn._
   private val store = mutable.ListBuffer[String]()
 
   def consoleInterpreter: Console ~> Id = new (Console ~> Id) {
@@ -59,8 +59,6 @@ object Program {
   import Domain._
   import Dsl._
   import Interpreter._
-  import cats.free.Free
-  import cats.{Id, ~>}
 
   type App[A] = Coproduct[Console, Store, A]
   val interpreter: App ~> Id = consoleInterpreter or storeInterpreter
