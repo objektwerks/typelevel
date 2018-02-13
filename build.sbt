@@ -9,10 +9,12 @@ libraryDependencies ++= {
   Seq(
     "org.typelevel" % "cats-core_2.12" % catsVersion,
     "org.typelevel" % "cats-free_2.12" % catsVersion,
+    "io.circe" %% "circe-generic" % "0.9.1",
     "io.monix" % "monix_2.12" % "2.3.3",
     "com.chuusai" % "shapeless_2.12" % "2.3.3",
     "org.tpolecat" % "doobie-core_2.12" % doobieVersion,
     "org.tpolecat" % "doobie-h2_2.12" % doobieVersion,
+    "org.http4s" % "http4s-blaze-client_2.12" % http4sVersion,
     "org.http4s" % "http4s-blaze-server_2.12" % http4sVersion,
     "org.http4s" % "http4s-circe_2.12" % http4sVersion,
     "org.http4s" % "http4s-dsl_2.12" % http4sVersion,
