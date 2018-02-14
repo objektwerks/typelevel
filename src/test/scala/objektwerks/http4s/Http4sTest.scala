@@ -27,7 +27,7 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
     case GET -> Root / "now" => Ok(Now().asJson)
     case request @ POST -> Root / "message" => for {
       message <- request.as[Message]
-      response <- Ok(Message(s"Client: ${message.text}, Server: Cheers!").asJson)
+      response <- Ok(Message(s"client: ${message.text}  server: Cheers!").asJson)
     } yield response
   }
 
@@ -41,7 +41,7 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
     client.shutdownNow()
   }
 
-  test("get") {
+  test("client-server get") {
     val get = Request[IO](Method.GET, uri("http://localhost:7979/now"))
     val io = client.expect[Now](get)
     val now = io.unsafeRunSync()
@@ -49,7 +49,7 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
     println(s"The current time is: ${now.time}")
   }
 
-  test("post") {
+  test("client-server post") {
     val post = Request[IO](Method.POST, uri("http://localhost:7979/message")).withBody(Message("Prost!").asJson)
     val io = client.expect[Message](post)
     val message = io.unsafeRunSync()
@@ -57,18 +57,18 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
     println(message.text)
   }
 
-  test("serverless") {
+  test("serverless get") {
     val get = Request[IO](Method.GET, uri("/now"))
-    val post = Request[IO](Method.POST, uri("/message")).withBody(Message("Prost!").asJson).unsafeRunSync()
-
-    val ioGet = service.orNotFound.run(get)
-    val ioPost = service.orNotFound.run(post)
-
-    val now = ioGet.unsafeRunSync().as[Now].unsafeRunSync()
+    val id = service.orNotFound.run(get)
+    val now = id.unsafeRunSync().as[Now].unsafeRunSync()
     assert(now.time.nonEmpty)
-    println(s"The current time is: ${now.time}")
+    println(s"current time: ${now.time}")
+  }
 
-    val message = ioPost.unsafeRunSync().as[Message].unsafeRunSync()
+  test("serverless post") {
+    val post = Request[IO](Method.POST, uri("/message")).withBody(Message("Prost!").asJson).unsafeRunSync()
+    val io = service.orNotFound.run(post)
+    val message = io.unsafeRunSync().as[Message].unsafeRunSync()
     assert(message.text.nonEmpty)
     println(message.text)
   }
