@@ -17,9 +17,18 @@ object Now {
   implicit val nowDecoder = jsonOf[IO, Now]
 }
 
+case class Message(text: String)
+object Message {
+  implicit val messageDecoder = jsonOf[IO, Message]
+}
+
 class Http4sTest extends FunSuite with BeforeAndAfterAll {
   val service = HttpService[IO] {
     case GET -> Root / "now" => Ok(Now().asJson)
+    case request @ POST -> Root / "message" => for {
+      message <- request.as[Message]
+      response <- Ok(Message(s"Client: ${message.text}, Server: Cheers!").asJson)
+    } yield response
   }
 
   val builder = BlazeBuilder[IO].bindHttp(7979).mountService(service, "/").start
@@ -33,9 +42,18 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("get") {
-    val get = client.expect[Now]("http://localhost:7979/now")
-    val now = get.unsafeRunSync()
+    val get = uri("http://localhost:7979/now")
+    val io = client.expect[Now](get)
+    val now = io.unsafeRunSync()
     assert(now.time.nonEmpty)
-    println(s"The time is: ${now.time}")
+    println(s"The current time is: ${now.time}")
+  }
+
+  test("post") {
+    val post = Request[IO](Method.POST, uri("http://localhost:7979/message")).withBody(Message("Prost!").asJson)
+    val io = client.expect[Message](post)
+    val message = io.unsafeRunSync()
+    assert(message.text.nonEmpty)
+    println(message.text)
   }
 }

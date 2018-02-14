@@ -18,7 +18,7 @@ libraryDependencies ++= {
     "org.http4s" % "http4s-blaze-server_2.12" % http4sVersion,
     "org.http4s" % "http4s-circe_2.12" % http4sVersion,
     "org.http4s" % "http4s-dsl_2.12" % http4sVersion,
-    "com.typesafe.scala-logging" % "scala-logging_2.12" % "3.7.2",
+    "ch.qos.logback" % "logback-classic" % "1.2.3",
     "org.scalatest" % "scalatest_2.12" % "3.0.4" % "test"
   )
 }
