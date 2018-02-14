@@ -64,11 +64,12 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
     val ioGet = service.orNotFound.run(get)
     val ioPost = service.orNotFound.run(post)
 
-    val now = ioGet.unsafeRunSync()
-    val message = ioPost.unsafeRunSync()
-    assert(now.status == Status.Ok)
-    assert(message.status == Status.Ok)
-    assert(now.body.toString.nonEmpty)
-    assert(message.body.toString.nonEmpty)
+    val now = ioGet.unsafeRunSync().as[Now].unsafeRunSync()
+    assert(now.time.nonEmpty)
+    println(s"The current time is: ${now.time}")
+
+    val message = ioPost.unsafeRunSync().as[Message].unsafeRunSync()
+    assert(message.text.nonEmpty)
+    println(message.text)
   }
 }
