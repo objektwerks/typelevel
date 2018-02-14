@@ -59,8 +59,7 @@ class CatsTest extends FunSuite with Matchers {
     import cats.syntax.option._
 
     val list = List(1, 2)
-    val result = Functor[List].map(list)(_ * 1)
-    list shouldEqual result
+    Functor[List].map(list)(_ * 3) shouldEqual List(3, 6)
 
     val double = (x: Int) => x * x
     val lifted = Functor[Option].lift(double)
