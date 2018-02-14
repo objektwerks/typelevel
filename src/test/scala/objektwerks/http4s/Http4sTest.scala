@@ -56,4 +56,19 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
     assert(message.text.nonEmpty)
     println(message.text)
   }
+
+  test("serverless") {
+    val get = Request[IO](Method.GET, uri("/now"))
+    val post = Request[IO](Method.POST, uri("/message")).withBody(Message("Prost!").asJson).unsafeRunSync()
+
+    val ioGet = service.orNotFound.run(get)
+    val ioPost = service.orNotFound.run(post)
+
+    val now = ioGet.unsafeRunSync()
+    val message = ioPost.unsafeRunSync()
+    assert(now.status == Status.Ok)
+    assert(message.status == Status.Ok)
+    assert(now.body.toString.nonEmpty)
+    assert(message.body.toString.nonEmpty)
+  }
 }
