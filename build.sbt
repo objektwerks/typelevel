@@ -9,7 +9,6 @@ libraryDependencies ++= {
   Seq(
     "org.typelevel" % "cats-core_2.12" % catsVersion,
     "org.typelevel" % "cats-free_2.12" % catsVersion,
-    "org.typelevel" %% "cats-effect" % "0.8",
     "io.circe" %% "circe-generic" % "0.9.1",
     "io.monix" % "monix_2.12" % "2.3.3",
     "com.chuusai" % "shapeless_2.12" % "2.3.3",
@@ -20,7 +19,7 @@ libraryDependencies ++= {
     "org.http4s" % "http4s-circe_2.12" % http4sVersion,
     "org.http4s" % "http4s-dsl_2.12" % http4sVersion,
     "ch.qos.logback" % "logback-classic" % "1.2.3",
-    "org.scalatest" % "scalatest_2.12" % "3.0.4" % "test"
+    "org.scalatest" % "scalatest_2.12" % "3.0.5" % "test"
   )
 }
 scalacOptions ++= Seq(
