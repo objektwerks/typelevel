@@ -68,27 +68,11 @@ class CatsTest extends FunSuite with Matchers {
 
   test("monad") {
     import cats.Monad
-    import cats.instances.list._
     import cats.instances.option._
-    import cats.syntax.applicative._
     import cats.syntax.option._
 
     Monad[Option].pure(3) shouldEqual 3.some
     Monad[Option].map(3.some)(n => n * 3) shouldEqual 9.some
     Monad[Option].flatMap(3.some)(n => (n * 3).some) shouldEqual 9.some
-
-    3.pure[Option] shouldEqual 3.some
-    3.pure[List] shouldEqual List(3)
-  }
-
-  test("monad transformer") {
-    import cats.data.OptionT
-    import cats.instances.list._
-    import cats.syntax.applicative._
-    import cats.syntax.option._
-
-    type ListOption[A] = OptionT[List, A]
-    val result: ListOption[Int] = 3.pure[ListOption]
-    result.value shouldEqual List(3.some)
   }
 }
