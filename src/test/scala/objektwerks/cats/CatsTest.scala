@@ -42,11 +42,8 @@ class CatsTest extends FunSuite with Matchers {
     Monoid[Int].combine(1, 2) shouldEqual 3
     Monoid[Option[Int]].combine(1.some, 2.some) shouldEqual 3.some
 
-    val x = 1 |+| 2 |+| Monoid[Int].empty
-    x shouldEqual 3
-
-    val amount = Amount(1) |+| Amount(2)
-    amount shouldEqual Amount(3)
+    1 |+| 2 |+| Monoid[Int].empty shouldEqual 3
+    Amount(1) |+| Amount(2) shouldEqual Amount(3)
   }
 
   test("foldable") {
