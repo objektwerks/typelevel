@@ -2,6 +2,7 @@ package objektwerks.cats
 
 import org.scalatest.{FunSuite, Matchers}
 
+case class Amount(value: Double)
 object Amount {
   import cats.Monoid
   implicit val amountMonoid: Monoid[Amount] = new Monoid[Amount] {
