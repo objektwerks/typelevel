@@ -42,7 +42,7 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("get") {
-    val get = uri("http://localhost:7979/now")
+    val get = Request[IO](Method.GET, uri("http://localhost:7979/now"))
     val io = client.expect[Now](get)
     val now = io.unsafeRunSync()
     assert(now.time.nonEmpty)
