@@ -8,7 +8,7 @@ import org.scalatest.{FunSuite, Matchers}
 import scala.concurrent.duration._
 import scala.util.{Failure, Success}
 
-class TaskTest extends FunSuite with Matchers {
+class MonixTest extends FunSuite with Matchers {
   test("run async task") {
     val task = Task { 1 + 2 }
     val cancelable = task.runAsync
