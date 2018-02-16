@@ -2,6 +2,8 @@ $(document).ready(function() {
     $("#button.now").on("click", function(event) {
         var request = $.ajax({
             url: "/now",
+            method: "GET",
+            dataType: "text",
             cache: false
         });
         request.done(function(now) {
