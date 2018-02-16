@@ -23,8 +23,10 @@ object Message {
 }
 
 object Services {
-  val service = HttpService[IO] {
+  val nowService = HttpService[IO] {
     case GET -> Root / "now" => Ok(Now().asJson)
+  }
+  val messageService = HttpService[IO] {
     case request @ POST -> Root / "message" => for {
       message <- request.as[Message]
       response <- Ok(Message(s"client: ${message.text}  server: Cheers!").asJson)
@@ -35,7 +37,12 @@ object Services {
 class Http4sTest extends FunSuite with BeforeAndAfterAll {
   import Services._
 
-  val server = BlazeBuilder[IO].bindHttp(7979).mountService(service, "/").start.unsafeRunSync()
+  val server = BlazeBuilder[IO]
+    .bindHttp(7979)
+    .mountService(nowService, "/")
+    .mountService(messageService, "/")
+    .start
+    .unsafeRunSync()
   val client = Http1Client[IO]().unsafeRunSync()
 
   override protected def afterAll(): Unit = {
@@ -61,7 +68,7 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
 
   test("serverless get") {
     val get = Request[IO](Method.GET, uri("/now"))
-    val io = service.orNotFound.run(get)
+    val io = nowService.orNotFound.run(get)
     val now = io.unsafeRunSync().as[Now].unsafeRunSync()
     assert(now.time.nonEmpty)
     println(s"current time: ${now.time}")
@@ -69,7 +76,7 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
 
   test("serverless post") {
     val post = Request[IO](Method.POST, uri("/message")).withBody(Message("Prost!").asJson).unsafeRunSync()
-    val io = service.orNotFound.run(post)
+    val io = messageService.orNotFound.run(post)
     val message = io.unsafeRunSync().as[Message].unsafeRunSync()
     assert(message.text.nonEmpty)
     println(message.text)
