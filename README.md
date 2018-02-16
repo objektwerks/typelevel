@@ -20,8 +20,8 @@ Run
  [2] objektwerks.app.OrdersFreeMonadApp
 
 Enter number: 1
-[info] Running objektwerks.app.NowHttp4sApp 
-open browser and type / return this url: http://localhost:7777/
+[info] Running objektwerks.app.NowHttp4sApp
+todo: open your browser; enter and return this url: http://localhost:7777/
 
 Enter number: 2
 [info] Running objektwerks.app.OrdersFreeMonadApp 
