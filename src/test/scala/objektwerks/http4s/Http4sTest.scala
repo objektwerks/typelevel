@@ -61,8 +61,8 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
 
   test("serverless get") {
     val get = Request[IO](Method.GET, uri("/now"))
-    val id = service.orNotFound.run(get)
-    val now = id.unsafeRunSync().as[Now].unsafeRunSync()
+    val io = service.orNotFound.run(get)
+    val now = io.unsafeRunSync().as[Now].unsafeRunSync()
     assert(now.time.nonEmpty)
     println(s"current time: ${now.time}")
   }
