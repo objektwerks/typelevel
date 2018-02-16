@@ -22,7 +22,7 @@ object Message {
   implicit val messageDecoder = jsonOf[IO, Message]
 }
 
-class Http4sTest extends FunSuite with BeforeAndAfterAll {
+object Services {
   val service = HttpService[IO] {
     case GET -> Root / "now" => Ok(Now().asJson)
     case request @ POST -> Root / "message" => for {
@@ -30,10 +30,13 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
       response <- Ok(Message(s"client: ${message.text}  server: Cheers!").asJson)
     } yield response
   }
+}
+
+class Http4sTest extends FunSuite with BeforeAndAfterAll {
+  import Services._
 
   val builder = BlazeBuilder[IO].bindHttp(7979).mountService(service, "/").start
   val server = builder.unsafeRunSync
-
   val client = Http1Client[IO]().unsafeRunSync()
 
   override protected def afterAll(): Unit = {
