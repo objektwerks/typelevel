@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Now</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <script type='text/javascript'>
+        $('#button.now').on('click', function(event) {
+            $.ajax({
+              url: "/now",
+              success: function(result) {
+                $('#text.now').html('<strong>' + result + '</strong>');
+              }
+            });
+        });
+    </script>
+
+    <div>
+        <button id='button.now' type='button'>Now</button><p>The time is now:</p><p id='text.now'></p>
+    </div>
+</body>
+</html>
