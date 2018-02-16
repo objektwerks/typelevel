@@ -20,8 +20,11 @@ object Now {
 }
 
 object Services {
+  val indexService = HttpService[IO] {
+    case request @ GET -> Root => StaticFile.fromResource("/index.html", Some(request)).getOrElseF(NotFound())
+  }
   val resourceService = HttpService[IO] {
-    case request @ GET -> Root / path if List(".css", ".html", ".js").exists(path.endsWith) =>
+    case request @ GET -> Root / path if List(".css", ".js").exists(path.endsWith) =>
       StaticFile.fromResource("/" + path, Some(request)).getOrElseF(NotFound())
   }
   val nowService = HttpService[IO] {
@@ -35,6 +38,7 @@ object NowHttp4sApp extends StreamApp[IO] {
   override def stream(args: List[String], requestShutdown: IO[Unit]): Stream[IO, ExitCode] =
     BlazeBuilder[IO]
       .bindHttp(7777)
+      .mountService(indexService, "/")
       .mountService(resourceService, "/")
       .mountService(nowService, "/")
       .serve
