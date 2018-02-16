@@ -1,5 +1,7 @@
 $(document).ready(function() {
-    $("#button.now").on("click", function(event) {
+    console.log("document is ready!")
+    $("#button-now").click(function() {
+        console.log("button-now clicked!")
         var request = $.ajax({
             url: "/now",
             dataType: "json",
@@ -7,10 +9,10 @@ $(document).ready(function() {
         });
         request.done(function(data, textStatus, jqXHR) {
             console.log("data: " + data + " : textStatus: " + textStatus + " : jqXHR: " + jqXHR);
-            $("#text.now").text(jqXHR.responseJSON);
+            $("#text-now").text(jqXHR.responseJSON);
         });
         request.fail(function(jqXHR, textStatus, errorThrown) {
-            console.log( "text status: " + textStatus + " : error thrown" + errorThrown);
+            console.log("jqXHR: " + jqXHR + " : textStatus: " + textStatus + " : errorThrown" + errorThrown);
         });
     });
 })
