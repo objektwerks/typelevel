@@ -35,8 +35,7 @@ object Services {
 class Http4sTest extends FunSuite with BeforeAndAfterAll {
   import Services._
 
-  val builder = BlazeBuilder[IO].bindHttp(7979).mountService(service, "/").start
-  val server = builder.unsafeRunSync
+  val server = BlazeBuilder[IO].bindHttp(7979).mountService(service, "/").start.unsafeRunSync()
   val client = Http1Client[IO]().unsafeRunSync()
 
   override protected def afterAll(): Unit = {
