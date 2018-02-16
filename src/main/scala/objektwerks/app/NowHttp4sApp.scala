@@ -22,7 +22,7 @@ object Now {
 object Services {
   val webService = HttpService[IO] {
     case request @ GET -> Root / path if List(".js", ".css", ".html").exists(path.endsWith) =>
-      StaticFile.fromResource("/" + file, Some(request)).getOrElseF(NotFound())
+      StaticFile.fromResource("/" + path, Some(request)).getOrElseF(NotFound())
   }
   val nowService = HttpService[IO] {
     case GET -> Root / "now" => Ok(Now().asJson)
