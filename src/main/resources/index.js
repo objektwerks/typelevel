@@ -7,11 +7,11 @@ $(document).ready(function() {
             cache: false
         });
         request.done(function(now) {
-            alert("current time: " + now);
+            console.log("current time: " + now);
             $("#text.now").text(now);
         });
         request.fail(function(xhr, failure) {
-            alert( "failure: " + failure);
+            console.log( "failure: " + failure);
         });
     });
 })
