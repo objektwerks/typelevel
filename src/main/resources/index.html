@@ -4,25 +4,12 @@
     <meta charset="UTF-8">
     <title>Now</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="index.js"></script>
 </head>
 <body>
     <div>
         <p>The time is now:</p><span id='text.now'></span>
         <button id='button.now' type='button'>Now</button>
     </div>
-
-    <script type='text/javascript'>
-    $(document).ready(function() {
-        $('#button.now').on('click', function(event) {
-            $.ajax({
-              url: "/now",
-              success: function(result) {
-                console.log('current time: ' + result);
-                $('#text.now').html('<strong>' + result + '</strong>');
-              }
-            });
-        });
-    });
-    </script>
 </body>
 </html>
