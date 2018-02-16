@@ -3,10 +3,10 @@ $(document).ready(function() {
     $.ajax({
         url: "/now",
         cache: false
-    }).done(function(text) {
-        alert("current time: " + result);
-        $("#text.now").text(result);
-    }).fail(function(jqXHR, textStatus) {
-        alert( "Request failed: " + textStatus);
+    }).done(function(now) {
+        alert("current time: " + now);
+        $("#text.now").text(now);
+    }).fail(function(xhr, failure) {
+        alert( "failure: " + failure);
     });
 });
