@@ -12,6 +12,7 @@ import org.http4s.circe._
 import org.http4s.dsl.impl.Root
 import org.http4s.dsl.io._
 import org.http4s.server.blaze._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 case class Now(time: String = LocalTime.now.toString)
 object Now {
