@@ -40,6 +40,6 @@ object NowHttp4sApp extends StreamApp[IO] {
       .bindHttp(7777)
       .mountService(indexService, "/")
       .mountService(resourceService, "/")
-      .mountService(nowService, "/")
+      .mountService(nowService, "/api/v1")
       .serve
 }
