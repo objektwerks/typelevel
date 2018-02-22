@@ -24,7 +24,7 @@ object Services {
     case request @ GET -> Root => StaticFile.fromResource("/index.html", Some(request)).getOrElseF(NotFound())
   }
   val resourceService = HttpService[IO] {
-    case request @ GET -> Root / path if List(".css", ".js").exists(path.endsWith) =>
+    case request @ GET -> Root / path if List(".css", ".js", ".appcache").exists(path.endsWith) =>
       StaticFile.fromResource("/" + path, Some(request)).getOrElseF(NotFound())
   }
   val nowService = HttpService[IO] {
