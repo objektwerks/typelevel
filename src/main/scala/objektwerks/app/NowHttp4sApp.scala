@@ -24,12 +24,21 @@ object Services {
     case request @ GET -> Root => StaticFile.fromResource("/index.html", Some(request)).getOrElseF(NotFound())
   }
   val resourceService = HttpService[IO] {
-    case request @ GET -> Root / path if List(".css", ".js", ".appcache").exists(path.endsWith) =>
+    case request @ GET -> Root / path if List(".css", ".js", ".png", ".appcache").exists(path.endsWith) =>
       StaticFile.fromResource("/" + path, Some(request)).getOrElseF(NotFound())
   }
   val nowService = HttpService[IO] {
     case GET -> Root / "now" => Ok(Now().asJson)
   }
+}
+
+object Headers {
+  def addHeader(response: Response[IO], header: Header) = response match {
+    case Status.Successful(r) => r.putHeaders(header)
+    case r => r
+  }
+
+  def apply(service: HttpService[IO], header: Header) = service.map(addHeader(_, header))
 }
 
 object NowHttp4sApp extends StreamApp[IO] {
@@ -38,8 +47,8 @@ object NowHttp4sApp extends StreamApp[IO] {
   override def stream(args: List[String], requestShutdown: IO[Unit]): Stream[IO, ExitCode] =
     BlazeBuilder[IO]
       .bindHttp(7777)
-      .mountService(indexService, "/")
-      .mountService(resourceService, "/")
+      .mountService(Headers(indexService, Header("Cache-Control", "no-cache, no-store, must-revalidate")), "/")
+      .mountService(Headers(resourceService, Header("Cache-Control", "no-cache, no-store, must-revalidate")), "/")
       .mountService(nowService, "/api/v1")
       .serve
 }
