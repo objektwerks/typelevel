@@ -2,15 +2,6 @@ package objektwerks.cats
 
 import org.scalatest.{FunSuite, Matchers}
 
-case class Amount(value: Double)
-object Amount {
-  import cats.Monoid
-  implicit val amountMonoid: Monoid[Amount] = new Monoid[Amount] {
-    def empty: Amount = Amount(0)
-    def combine(x: Amount, y: Amount): Amount = Amount(x.value + y.value)
-  }
-}
-
 class CatsTest extends FunSuite with Matchers {
   test("eq") {
     import cats.Eq
@@ -31,15 +22,20 @@ class CatsTest extends FunSuite with Matchers {
     1.show shouldEqual "1"
   }
 
+  test("semigroup") {
+    import cats.instances.int._
+    import cats.Semigroup
+
+    Semigroup[Int].combine(1, 2) shouldEqual 3
+  }
+
   test("monoid") {
     import cats.instances.int._
     import cats.syntax.monoid._
-    import cats.{Monoid, Semigroup}
+    import cats.Monoid
 
-    Semigroup[Int].combine(1, 2) shouldEqual 3
     Monoid[Int].combine(1, 2) shouldEqual 3
     1 |+| 2 |+| Monoid[Int].empty shouldEqual 3
-    Amount(1) |+| Amount(2) shouldEqual Amount(3)
   }
 
   test("foldable") {
