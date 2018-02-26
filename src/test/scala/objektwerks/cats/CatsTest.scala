@@ -31,7 +31,7 @@ class CatsTest extends FunSuite with Matchers {
     import cats.syntax.semigroup._
 
     Semigroup[Int].combine(1, 2) shouldEqual 3
-    1.combine(2) shouldEqual 3
+    1 |+| 2 shouldEqual 3
   }
 
   test("monoid") {
