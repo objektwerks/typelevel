@@ -14,8 +14,8 @@ class CatsTest extends FunSuite with Matchers {
 
   test("show") {
     import cats.Show
-    import cats.syntax.show._
     import cats.instances.int._
+    import cats.syntax.show._
 
     val showInt = Show[Int]
     showInt.show(1) shouldEqual "1"
@@ -31,8 +31,8 @@ class CatsTest extends FunSuite with Matchers {
 
   test("monoid") {
     import cats.Monoid
-    import cats.syntax.monoid._
     import cats.instances.int._
+    import cats.syntax.monoid._
 
     Monoid[Int].combine(1, 2) shouldEqual 3
     1 |+| 2 |+| Monoid[Int].empty shouldEqual 3
@@ -54,10 +54,10 @@ class CatsTest extends FunSuite with Matchers {
 
   test("monad") {
     import cats.Monad
-    import cats.syntax.option._
     import cats.instances.option._
+    import cats.syntax.option._
 
-    Monad[Option].map(3.some)(_ * 3) shouldEqual 9.some
     Monad[Option].flatMap(3.some)(i => (i * 3).some).sum shouldEqual 9
+    Monad[Option].map(3.some)(_ * 3) shouldEqual 9.some
   }
 }
