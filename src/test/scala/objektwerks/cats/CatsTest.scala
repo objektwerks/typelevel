@@ -71,11 +71,8 @@ class CatsTest extends FunSuite with Matchers {
     import cats.data.Validated.{Invalid, Valid}
     import cats.syntax.validated._
 
-    Validated.Valid(3) shouldEqual Valid(3)
-    Validated.Invalid("three") shouldEqual Invalid("three")
     Validated.valid[String, Int](3) shouldEqual Valid(3)
     Validated.invalid[String, Int]("three") shouldEqual Invalid("three")
-
     3.valid[String] shouldEqual Valid(3)
     "three".invalid[Int] shouldEqual Invalid("three")
 
