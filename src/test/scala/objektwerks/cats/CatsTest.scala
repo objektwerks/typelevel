@@ -20,8 +20,7 @@ class CatsTest extends FunSuite with Matchers {
     import cats.instances.int._
     import cats.syntax.show._
 
-    val showInt = Show[Int]
-    showInt.show(1) shouldEqual "1"
+    Show[Int].show(1) shouldEqual "1"
     1.show shouldEqual "1"
   }
 
