@@ -41,25 +41,15 @@ class CatsTest extends FunSuite with Matchers {
   test("foldable") {
     import cats.Foldable
     import cats.instances.list._
-    import cats.instances.option._
-    import cats.syntax.option._
 
-    Foldable[Option].foldLeft(3.some, 3)(_ + _) shouldEqual 6
     Foldable[List].foldLeft(List(1, 2, 3), 0)(_ + _) shouldEqual 6
   }
 
   test("functor") {
     import cats.Functor
     import cats.instances.list._
-    import cats.instances.option._
-    import cats.syntax.option._
 
-    val list = List(1, 2)
-    Functor[List].map(list)(_ * 3) shouldEqual List(3, 6)
-
-    val double = (x: Int) => x * x
-    val lifted = Functor[Option].lift(double)
-    lifted(3.some) shouldEqual 9.some
+    Functor[List].map(List(1, 2))(_ * 3) shouldEqual List(3, 6)
   }
 
   test("monad") {
@@ -67,8 +57,7 @@ class CatsTest extends FunSuite with Matchers {
     import cats.instances.option._
     import cats.syntax.option._
 
-    Monad[Option].pure(3) shouldEqual 3.some
-    Monad[Option].map(3.some)(n => n * 3) shouldEqual 9.some
-    Monad[Option].flatMap(3.some)(n => (n * 3).some) shouldEqual 9.some
+    Monad[Option].map(3.some)(_ * 3) shouldEqual 9.some
+    Monad[Option].flatMap(3.some)(i => (i * 3).some).sum shouldEqual 9
   }
 }
