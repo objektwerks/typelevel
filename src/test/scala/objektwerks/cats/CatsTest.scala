@@ -6,10 +6,13 @@ class CatsTest extends FunSuite with Matchers {
   test("eq") {
     import cats.Eq
     import cats.instances.int._
+    import cats.syntax.eq._
 
     val eqInt = Eq[Int]
     eqInt.eqv(1, 1) shouldBe true
     eqInt.neqv(1, 2) shouldBe true
+    // Conflict with Scalatest? assert(1 === 1)
+    assert(1 =!= 3)
   }
 
   test("show") {
@@ -25,8 +28,10 @@ class CatsTest extends FunSuite with Matchers {
   test("semigroup") {
     import cats.Semigroup
     import cats.instances.int._
+    import cats.syntax.semigroup._
 
     Semigroup[Int].combine(1, 2) shouldEqual 3
+    1.combine(2) shouldEqual 3
   }
 
   test("monoid") {
