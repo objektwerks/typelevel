@@ -2,6 +2,8 @@ package objektwerks.cats
 
 import org.scalatest.{FunSuite, Matchers}
 
+import scala.util.Try
+
 class CatsTest extends FunSuite with Matchers {
   test("eq") {
     import cats.Eq
@@ -93,20 +95,20 @@ class CatsTest extends FunSuite with Matchers {
   }
 
   test("validated") {
-    import cats.data.Validated
+    import cats.data.Validated._
     import cats.data.Validated.{Invalid, Valid}
     import cats.syntax.validated._
 
-    Validated.valid[String, Int](3) shouldEqual Valid(3)
-    Validated.invalid[String, Int]("three") shouldEqual Invalid("three")
+    valid[String, Int](3) shouldEqual Valid(3)
+    invalid[String, Int]("three") shouldEqual Invalid("three")
+    catchOnly[NumberFormatException]("three".toInt).isInvalid shouldBe true
+    catchNonFatal(sys.error("Nonfatal")).isInvalid shouldBe true
+    fromTry(Try("three".toInt)).isInvalid shouldBe true
+    fromEither[String, Int](Left("Error")).isInvalid shouldBe true
+    fromOption[String, Int](None, "Error").isInvalid shouldBe true
+
+    3.valid.map(_ * 3) shouldEqual Valid(9)
     3.valid[String] shouldEqual Valid(3)
     "three".invalid[Int] shouldEqual Invalid("three")
-
-    Validated.catchOnly[NumberFormatException]("three".toInt).isInvalid shouldBe true
-    Validated.catchNonFatal(sys.error("Nonfatal")).isInvalid shouldBe true
-    Validated.fromTry(scala.util.Try("three".toInt)).isInvalid shouldBe true
-    Validated.fromEither[String, Int](Left("Error")).isInvalid shouldBe true
-    Validated.fromOption[String, Int](None, "Error").isInvalid shouldBe true
-    3.valid.map(_ * 3) shouldEqual Valid(9)
   }
 }
