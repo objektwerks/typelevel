@@ -19,20 +19,9 @@ object Now {
   implicit val nowDecoder = jsonOf[IO, Now]
 }
 
-object Services {
-  val indexService = HttpService[IO] {
-    case request @ GET -> Root => StaticFile.fromResource("/index.html", Some(request)).getOrElseF(NotFound())
-  }
-  val resourceService = HttpService[IO] {
-    case request @ GET -> Root / path if List(".css", ".js", ".png", ".appcache").exists(path.endsWith) =>
-      StaticFile.fromResource("/" + path, Some(request)).getOrElseF(NotFound())
-  }
-  val nowService = HttpService[IO] {
-    case GET -> Root / "now" => Ok(Now().asJson)
-  }
-}
-
 object Headers {
+  val noCacheHeader = Header("Cache-Control", "no-cache, no-store, must-revalidate")
+
   def addHeader(response: Response[IO], header: Header) = response match {
     case Status.Successful(r) => r.putHeaders(header)
     case r => r
@@ -41,14 +30,33 @@ object Headers {
   def apply(service: HttpService[IO], header: Header) = service.map(addHeader(_, header))
 }
 
+object Services {
+  import Headers._
+
+  val indexService = HttpService[IO] {
+    case request @ GET -> Root => StaticFile.fromResource("/index.html", Some(request)).getOrElseF(NotFound())
+  }
+  val indexServiceWithNoCacheHeader = Headers(indexService, noCacheHeader)
+
+  val resourceService = HttpService[IO] {
+    case request @ GET -> Root / path if List(".css", ".js", ".png", ".appcache").exists(path.endsWith) =>
+      StaticFile.fromResource("/" + path, Some(request)).getOrElseF(NotFound())
+  }
+  val resourceServiceWithNoCacheHeader = Headers(resourceService, noCacheHeader)
+
+  val nowService = HttpService[IO] {
+    case GET -> Root / "now" => Ok(Now().asJson)
+  }
+}
+
 object NowHttp4sApp extends StreamApp[IO] {
   import Services._
 
   override def stream(args: List[String], requestShutdown: IO[Unit]): Stream[IO, ExitCode] =
     BlazeBuilder[IO]
       .bindHttp(7777)
-      .mountService(Headers(indexService, Header("Cache-Control", "no-cache, no-store, must-revalidate")), "/")
-      .mountService(Headers(resourceService, Header("Cache-Control", "no-cache, no-store, must-revalidate")), "/")
+      .mountService(indexServiceWithNoCacheHeader, "/")
+      .mountService(resourceServiceWithNoCacheHeader, "/")
       .mountService(nowService, "/api/v1")
       .serve
 }
