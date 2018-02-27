@@ -96,8 +96,10 @@ class CatsTest extends FunSuite with Matchers {
     import cats.instances.option._
     import cats.syntax.option._
 
-    Monad[Option].flatMap(3.some)(i => (i * 3).some).sum shouldEqual 9
-    Monad[Option].map(3.some)(_ * 3) shouldEqual 9.some
+    val square = (i: Int) => i * i
+    val cube = (i: Int) => Some(i * i * i)
+    Monad[Option].map(3.some)(square) shouldEqual 9.some
+    Monad[Option].flatMap(3.some)(cube).sum shouldEqual 27
   }
 
   test("validated") {
