@@ -81,8 +81,14 @@ class CatsTest extends FunSuite with Matchers {
   test("functor") {
     import cats.Functor
     import cats.instances.list._
+    import cats.instances.option._
 
     Functor[List].map(List(1, 2))(_ * 3) shouldEqual List(3, 6)
+    Functor[Option].map(Option(3))(_ * 3) shouldEqual Some(9)
+
+    val inc = (i: Int) => i + 1
+    val liftedInc = Functor[Option].lift(inc)
+    liftedInc(Option(1)) shouldEqual Some(2)
   }
 
   test("monad") {
