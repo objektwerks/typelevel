@@ -72,9 +72,9 @@ class CatsTest extends FunSuite with Matchers {
     val sequence = Traverse[List].sequence(listOfFutures)
     sequence foreach { xs => assert(xs == List(1, 2, 3)) }
 
-    val inc = (i: Int) => Future(i + 1)
+    val incr = (i: Int) => Future(i + 1)
     val list = List(1, 2, 3)
-    val traversal = Traverse[List].traverse(list)(inc)
+    val traversal = Traverse[List].traverse(list)(incr)
     traversal foreach { xs => assert( xs == List(2, 3, 4)) }
   }
 
@@ -86,9 +86,9 @@ class CatsTest extends FunSuite with Matchers {
     Functor[List].map(List(1, 2))(_ * 3) shouldEqual List(3, 6)
     Functor[Option].map(Option(3))(_ * 3) shouldEqual Some(9)
 
-    val inc = (i: Int) => i + 1
-    val liftedInc = Functor[Option].lift(inc)
-    liftedInc(Option(1)) shouldEqual Some(2)
+    val incr = (i: Int) => i + 1
+    val liftedIncr = Functor[Option].lift(incr)
+    liftedIncr(Option(1)) shouldEqual Some(2)
   }
 
   test("monad") {
