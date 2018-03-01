@@ -96,6 +96,9 @@ class CatsTest extends FunSuite with Matchers {
     import cats.instances.option._
     import cats.instances.list._
     import cats.syntax.option._
+    import cats.syntax.applicative._
+    import cats.syntax.functor._
+    import cats.syntax.flatMap._
 
     val square = (i: Int) => i * i
     val cube = (i: Int) => Some(i * i * i)
@@ -105,8 +108,13 @@ class CatsTest extends FunSuite with Matchers {
 
     val toInt = (s: String) => Try(s.toInt).toOption
     val list = List("1", "2", "3", "four")
+    3.pure[List] shouldEqual List(3)
     Monad[List].map(list)(toInt).flatten.sum shouldEqual 6
     Monad[List].flatMap(list)(s => toInt(s).toList).sum shouldEqual 6
+
+    def sum[F[_]: Monad](x: F[Int], y: F[Int]): F[Int] = x.flatMap(a => y.map(b => a + b))
+    sum(3.some, 3.some) shouldEqual 6.some
+    sum(List(1), List(2)) shouldEqual List(3)
   }
 
   test("validated") {
