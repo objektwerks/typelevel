@@ -1,6 +1,5 @@
 package objektwerks.cats
 
-import cats.Id
 import org.scalatest.{FunSuite, Matchers}
 
 import scala.util.Try
@@ -100,6 +99,7 @@ class CatsTest extends FunSuite with Matchers {
     import cats.syntax.applicative._
     import cats.syntax.functor._
     import cats.syntax.flatMap._
+    import cats.Id
 
     val square = (i: Int) => i * i
     val cube = (i: Int) => Some(i * i * i)
