@@ -99,8 +99,8 @@ class CatsTest extends FunSuite with Matchers {
 
     val square = (i: Int) => i * i
     val cube = (i: Int) => Some(i * i * i)
-    Monad[Option].map(3.some)(square).get shouldEqual 9
-    Monad[Option].flatMap(3.some)(cube).get shouldEqual 27
+    Monad[Option].map(3.some)(square).getOrElse(0) shouldEqual 9
+    Monad[Option].flatMap(3.some)(cube).getOrElse(0) shouldEqual 27
 
     val toInt = (s: String) => Try(s.toInt).toOption
     val list = List("1", "2", "3", "four")
