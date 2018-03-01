@@ -1,5 +1,6 @@
 package objektwerks.cats
 
+import cats.Id
 import org.scalatest.{FunSuite, Matchers}
 
 import scala.util.Try
@@ -115,6 +116,7 @@ class CatsTest extends FunSuite with Matchers {
     def sum[F[_]: Monad](x: F[Int], y: F[Int]): F[Int] = x.flatMap(a => y.map(b => a + b))
     sum(3.some, 3.some).getOrElse(0) shouldEqual 6
     sum(List(3), List(3)).sum shouldEqual 6
+    sum(3 : Id[Int], 3 : Id[Int]) shouldEqual 6
   }
 
   test("validated") {
