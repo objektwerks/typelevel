@@ -34,7 +34,7 @@ object Services {
   import Headers._
 
   val indexService = HttpService[IO] {
-    case GET -> Root => Ok("/index.html")
+    case request @ GET -> Root => StaticFile.fromResource("/index.html", Some(request)).getOrElseF(NotFound())
   }
   val indexServiceWithNoCacheHeader = Headers(indexService, noCacheHeader)
 
@@ -42,7 +42,6 @@ object Services {
     case request @ GET -> Root / path if List(".cache", ".ico", ".css", ".js").exists(path.endsWith) =>
       StaticFile.fromResource("/" + path, Some(request)).getOrElseF(NotFound())
   }
-  val resourceServiceWithNoCacheHeader = Headers(resourceService, noCacheHeader)
 
   val nowService = HttpService[IO] {
     case GET -> Root / "now" => Ok(Now().asJson)
@@ -56,7 +55,7 @@ object NowHttp4sApp extends StreamApp[IO] {
     BlazeBuilder[IO]
       .bindHttp(7777)
       .mountService(indexServiceWithNoCacheHeader, "/")
-      .mountService(resourceServiceWithNoCacheHeader, "/")
+      .mountService(resourceService, "/")
       .mountService(nowService, "/api/v1")
       .serve
 }
