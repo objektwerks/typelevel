@@ -34,12 +34,12 @@ object Services {
   import Headers._
 
   val indexService = HttpService[IO] {
-    case request @ GET -> Root => StaticFile.fromResource("/index.html", Some(request)).getOrElseF(NotFound())
+    case _ @ GET -> Root => Ok("/index.html")
   }
   val indexServiceWithNoCacheHeader = Headers(indexService, noCacheHeader)
 
   val resourceService = HttpService[IO] {
-    case request @ GET -> Root / path if List(".css", ".js", ".png", ".appcache").exists(path.endsWith) =>
+    case request @ GET -> Root / path if List(".css", ".js", ".ico", ".appcache").exists(path.endsWith) =>
       StaticFile.fromResource("/" + path, Some(request)).getOrElseF(NotFound())
   }
   val resourceServiceWithNoCacheHeader = Headers(resourceService, noCacheHeader)
