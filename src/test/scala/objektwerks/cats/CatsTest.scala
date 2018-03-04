@@ -127,6 +127,12 @@ class CatsTest extends FunSuite with Matchers {
       y <- 2.asRight
     } yield x + y
     z.getOrElse(0) shouldEqual 3
+
+    Either.catchOnly[NumberFormatException]("three".toInt).isLeft shouldBe true
+    Either.catchNonFatal(sys.error("Nonfatal")).isLeft shouldBe true
+    Either.fromTry(Try("three".toInt)).isLeft shouldBe true
+
+    3.asRight.ensure("Must be equal to 3.")(_ == 3).isRight shouldBe true
   }
 
   test("validated") {
