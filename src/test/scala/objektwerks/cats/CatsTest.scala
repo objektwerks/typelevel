@@ -119,6 +119,16 @@ class CatsTest extends FunSuite with Matchers {
     sum(3 : Id[Int], 3 : Id[Int]) shouldEqual 6
   }
 
+  test("either") {
+    import cats.syntax.either._
+
+    val z = for {
+      x <- 1.asRight
+      y <- 2.asRight
+    } yield x + y
+    z.getOrElse(0) shouldEqual 3
+  }
+
   test("validated") {
     import cats.data.Validated._
     import cats.data.Validated.{Invalid, Valid}
