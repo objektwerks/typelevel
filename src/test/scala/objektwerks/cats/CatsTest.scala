@@ -119,6 +119,18 @@ class CatsTest extends FunSuite with Matchers {
     sum(3 : Id[Int], 3 : Id[Int]) shouldEqual 6
   }
 
+  test("eval monad") {
+    import cats.Eval
+
+    val nowEagerMemoized = Eval.now(math.random)
+    val laterLazyMemoized = Eval.later(math.random)
+    val alwaysCalculated = Eval.always(math.random)
+
+    nowEagerMemoized.value shouldEqual nowEagerMemoized.value
+    laterLazyMemoized.value shouldEqual laterLazyMemoized.value
+    alwaysCalculated.value should not equal alwaysCalculated.value
+  }
+
   test("either") {
     import cats.syntax.either._
 
