@@ -132,6 +132,9 @@ class CatsTest extends FunSuite with Matchers {
 
     val task = Eval.always { 3 * 3 }.map { _ * 3 }
     task.value shouldEqual 27
+
+    def factorial(n: BigInt): Eval[BigInt] = if(n == 1) Eval.now(n) else Eval.defer(factorial(n - 1).map(_ * n))
+    println(s"stack-safe trampolined factorial: ${factorial(10000).value}")
   }
 
   test("either") {
