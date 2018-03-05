@@ -129,6 +129,9 @@ class CatsTest extends FunSuite with Matchers {
     nowEagerMemoized.value shouldEqual nowEagerMemoized.value
     laterLazyMemoized.value shouldEqual laterLazyMemoized.value
     alwaysCalculated.value should not equal alwaysCalculated.value
+
+    val task = Eval.always { 3 * 3 }.map { _ * 3 }
+    task.value shouldEqual 27
   }
 
   test("either") {
