@@ -119,6 +119,15 @@ class CatsTest extends FunSuite with Matchers {
     sum(3 : Id[Int], 3 : Id[Int]) shouldEqual 6
   }
 
+  test("writer monad") {
+    import cats.data.Writer
+
+    val writer = Writer(Vector("A joke is a very serious thing.", "Winston Churchill"), 1939)
+    val (quotes, year) = writer.run
+    quotes.size shouldEqual 2
+    year shouldEqual 1939
+  }
+
   test("eval monad") {
     import cats.Eval
 
