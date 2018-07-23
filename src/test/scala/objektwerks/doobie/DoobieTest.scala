@@ -34,7 +34,7 @@ class DoobieTest extends FunSuite with Matchers {
 
     val workers = Fragment.const("select * from worker").query[Worker]
     val tasks = Fragment.const("select * from task").query[Task]
-    workers.list.transact(db).unsafeRunSync.length shouldBe 2
-    tasks.list.transact(db).unsafeRunSync.length shouldBe 2
+    workers.to[List].transact(db).unsafeRunSync.length shouldBe 2
+    tasks.to[List].transact(db).unsafeRunSync.length shouldBe 2
   }
 }

@@ -3,13 +3,15 @@ organization := "objektwerks"
 version := "0.1-SNAPSHOT"
 scalaVersion := "2.12.6"
 libraryDependencies ++= {
-  val catsVersion = "1.0.1"
-  val doobieVersion = "0.5.0-M14"
-  val http4sVersion = "0.18.0"
+  val catsVersion = "1.1.0"
+  val circeVersion = "0.9.3"
+  val doobieVersion = "0.5.3"
+  val http4sVersion = "0.18.15"
   Seq(
     "org.typelevel" % "cats-core_2.12" % catsVersion,
     "org.typelevel" % "cats-free_2.12" % catsVersion,
-    "io.circe" % "circe-generic_2.12" % "0.9.1",
+    "io.circe" % "circe-core_2.12" % circeVersion,
+    "io.circe" % "circe-generic_2.12" % circeVersion,
     "io.monix" % "monix_2.12" % "2.3.3",
     "com.chuusai" % "shapeless_2.12" % "2.3.3",
     "org.tpolecat" % "doobie-core_2.12" % doobieVersion,
@@ -18,7 +20,7 @@ libraryDependencies ++= {
     "org.http4s" % "http4s-blaze-server_2.12" % http4sVersion,
     "org.http4s" % "http4s-circe_2.12" % http4sVersion,
     "org.http4s" % "http4s-dsl_2.12" % http4sVersion,
-    "co.fs2" % "fs2-core_2.12" % "0.10.1",
+    "co.fs2" % "fs2-core_2.12" % "0.10.5",
     "ch.qos.logback" % "logback-classic" % "1.2.3",
     "org.scalatest" % "scalatest_2.12" % "3.0.5" % "test"
   )
