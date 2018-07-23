@@ -4,12 +4,13 @@ version := "0.1-SNAPSHOT"
 scalaVersion := "2.12.6"
 libraryDependencies ++= {
   val catsVersion = "1.1.0"
-  val circeVersion = "0.9.3"
   val doobieVersion = "0.5.3"
   val http4sVersion = "0.18.15"
+  val circeVersion = "0.9.3"
   Seq(
     "org.typelevel" % "cats-core_2.12" % catsVersion,
     "org.typelevel" % "cats-free_2.12" % catsVersion,
+    "org.typelevel" % "cats-effect_2.12" % "0.10.1",
     "io.circe" % "circe-core_2.12" % circeVersion,
     "io.circe" % "circe-generic_2.12" % circeVersion,
     "io.monix" % "monix_2.12" % "2.3.3",
