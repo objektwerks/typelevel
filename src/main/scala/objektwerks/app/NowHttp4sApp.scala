@@ -12,6 +12,7 @@ import org.http4s.circe._
 import org.http4s.dsl.impl.Root
 import org.http4s.dsl.io._
 import org.http4s.server.blaze._
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 case class Now(time: String = LocalTime.now.toString)
@@ -22,12 +23,10 @@ object Now {
 object Headers {
   val noCacheHeader = Header("Cache-Control", "no-cache, no-store, must-revalidate")
 
-  def addHeader(response: Response[IO], header: Header) = response match {
+  def addHeader(response: Response[IO], header: Header): Response[IO] = response match {
     case Status.Successful(r) => r.putHeaders(header)
     case r => r
   }
-
-  def apply(service: HttpService[IO], header: Header) = service.map(addHeader(_, header))
 }
 
 object Services {
@@ -36,7 +35,7 @@ object Services {
   val indexService = HttpService[IO] {
     case request @ GET -> Root => StaticFile.fromResource("/index.html", Some(request)).getOrElseF(NotFound())
   }
-  val indexServiceWithNoCacheHeader = Headers(indexService, noCacheHeader)
+  val indexServiceWithNoCacheHeader = indexService.map(addHeader(_, noCacheHeader))
 
   val resourceService = HttpService[IO] {
     case request @ GET -> Root / path if List(".cache", ".ico", ".css", ".js").exists(path.endsWith) =>
