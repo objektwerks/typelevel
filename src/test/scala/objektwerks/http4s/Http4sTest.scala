@@ -42,26 +42,24 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
     .mountService(nowService, "/")
     .mountService(messageService, "/")
     .start
-    .unsafeRunSync()
-  val client = Http1Client[IO]().unsafeRunSync()
+    .unsafeRunSync
+  val client = Http1Client[IO]().unsafeRunSync
 
   override protected def afterAll(): Unit = {
-    server.shutdownNow()
-    client.shutdownNow()
+    server.shutdownNow
+    client.shutdownNow
   }
 
   test("client-server get") {
     val get = Request[IO](Method.GET, uri("http://localhost:7979/now"))
-    val io = client.expect[Now](get)
-    val now = io.unsafeRunSync()
+    val now = client.expect[Now](get).unsafeRunSync
     assert(now.time.nonEmpty)
     println(s"current time: ${now.time}")
   }
 
   test("client-server post") {
     val post = Request[IO](Method.POST, uri("http://localhost:7979/message")).withBody(Message("Prost!").asJson)
-    val io = client.expect[Message](post)
-    val message = io.unsafeRunSync()
+    val message = client.expect[Message](post).unsafeRunSync
     assert(message.text.nonEmpty)
     println(message.text)
   }
@@ -69,7 +67,7 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
   test("serverless get") {
     val get = Request[IO](Method.GET, uri("/now"))
     val io = nowService.orNotFound.run(get)
-    val now = io.unsafeRunSync().as[Now].unsafeRunSync()
+    val now = io.unsafeRunSync().as[Now].unsafeRunSync
     assert(now.time.nonEmpty)
     println(s"current time: ${now.time}")
   }
@@ -77,7 +75,7 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
   test("serverless post") {
     val post = Request[IO](Method.POST, uri("/message")).withBody(Message("Prost!").asJson).unsafeRunSync()
     val io = messageService.orNotFound.run(post)
-    val message = io.unsafeRunSync().as[Message].unsafeRunSync()
+    val message = io.unsafeRunSync().as[Message].unsafeRunSync
     assert(message.text.nonEmpty)
     println(message.text)
   }
