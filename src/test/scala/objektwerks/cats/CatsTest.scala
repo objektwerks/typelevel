@@ -180,7 +180,7 @@ class CatsTest extends FunSuite with Matchers {
     task.value shouldEqual 27
 
     def factorial(n: BigInt): Eval[BigInt] = if(n == 1) Eval.now(n) else Eval.defer(factorial(n - 1).map(_ * n))
-    println(s"stack-safe trampolined factorial: ${factorial(10000).value}")
+    println(s"stack-safe trampolined factorial: ${factorial(10).value}")
   }
 
   test("either") {

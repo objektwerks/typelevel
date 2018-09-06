@@ -50,8 +50,12 @@ class DoobieTest extends FunSuite {
   def select: Int = {
     val selectWorkers = sql"select * from worker".query[Worker]
     val selectTasks = sql"select * from task".query[Task]
-    val workers = selectWorkers.to[List].transact(xa).unsafeRunSync.length
-    val tasks = selectTasks.to[List].transact(xa).unsafeRunSync.length
-    workers + tasks
+    val workers = selectWorkers.to[List].transact(xa).unsafeRunSync
+    val tasks = selectTasks.to[List].transact(xa).unsafeRunSync
+
+    workers.foreach(println)
+    tasks.foreach(println)
+
+    workers.length + tasks.length
   }
 }
