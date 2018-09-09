@@ -6,7 +6,6 @@ import monix.reactive.Observable
 import org.scalatest.{FunSuite, Matchers}
 
 import scala.concurrent.duration._
-import scala.util.{Failure, Success}
 
 class MonixTest extends FunSuite with Matchers {
   test("run async task") {
@@ -17,10 +16,8 @@ class MonixTest extends FunSuite with Matchers {
 
   test("run on complete task") {
     val task = Task { 1 + 2 }
-    task.runOnComplete {
-      case Success(sum) => sum shouldBe 3
-      case Failure(failure) => throw failure
-    }
+    val cancellable = task.runAsync
+    cancellable.onComplete(x => x.get shouldBe 3)
   }
 
   test("run async observable task") {
@@ -39,9 +36,6 @@ class MonixTest extends FunSuite with Matchers {
   test("coeval task") {
     val task = Task.eval{ 1 + 2 }
     val evaluating = task.coeval
-    evaluating.value match {
-      case Left(_) => throw new IllegalArgumentException("coeval task failed")
-      case Right(sum) => sum shouldBe 3
-    }
+    evaluating.value.getOrElse(-1) shouldBe 3
   }
 }
