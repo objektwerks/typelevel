@@ -14,14 +14,15 @@ case class Worker(id: Int = 0, name: String)
 case class Task(id: Int = 0, workerId: Int, task: String)
 
 class DoobieTest extends FunSuite {
-  val xa = Transactor.fromDriverManager[IO]( "org.h2.Driver", "jdbc:h2:./target/testdb", "", "" )
+  val xa = Transactor.fromDriverManager[IO]( "org.h2.Driver", "jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1", "sa", "sa" )
   val schema = Source.fromInputStream(getClass.getResourceAsStream("/schema.sql")).mkString
 
   test("ddl > insert > update > select") {
     assert(ddl(schema) == 0)
-    assert(insert == 2)
+    assert((1, 2, 1, 2) == insert)
     assert(update == 1)
     assert(select == 4)
+    assert(delete == 4)
   }
 
   def ddl(schema: String): Int = {
@@ -29,16 +30,30 @@ class DoobieTest extends FunSuite {
     ddl.transact(xa).unsafeRunSync
   }
 
-  def insert: Int = {
-    val barney = sql"insert into worker(name) values ('barney')".update
-    val fred = sql"insert into worker(name) values('fred')".update
-    val workers = (barney.run *> fred.run).transact(xa).unsafeRunSync
+  def insert: (Int, Int, Int, Int) = {
+    val barneyId = sql"insert into worker(name) values ('barney')"
+      .update
+      .withUniqueGeneratedKeys[Int]("id")
+      .transact(xa)
+      .unsafeRunSync
+    val fredId = sql"insert into worker(name) values('fred')"
+      .update
+      .withUniqueGeneratedKeys[Int]("id")
+      .transact(xa)
+      .unsafeRunSync
 
-    val barneyTask = sql"insert into task(workerId, task) values(1, 'clean pool')".update
-    val fredTask = sql"insert into task(workerId, task) values(2, 'clean pool')".update
-    val tasks = (barneyTask.run *> fredTask.run).transact(xa).unsafeRunSync
+    val barneyTaskId = sql"insert into task(workerId, task) values($barneyId, 'clean pool')"
+      .update
+      .withUniqueGeneratedKeys[Int]("id")
+      .transact(xa)
+      .unsafeRunSync
+    val fredTaskId = sql"insert into task(workerId, task) values($fredId, 'clean pool')"
+      .update
+      .withUniqueGeneratedKeys[Int]("id")
+      .transact(xa)
+      .unsafeRunSync
 
-    workers + tasks
+    (barneyId, fredId, barneyTaskId, fredTaskId)
   }
 
   def update: Int = {
@@ -48,14 +63,18 @@ class DoobieTest extends FunSuite {
   }
 
   def select: Int = {
-    val selectWorkers = sql"select * from worker".query[Worker]
-    val selectTasks = sql"select * from task".query[Task]
-    val workers = selectWorkers.to[List].transact(xa).unsafeRunSync
-    val tasks = selectTasks.to[List].transact(xa).unsafeRunSync
+    val workers = sql"select * from worker".query[Worker].to[List].transact(xa).unsafeRunSync
+    val tasks = sql"select * from task".query[Task].to[List].transact(xa).unsafeRunSync
 
     workers.foreach(println)
     tasks.foreach(println)
 
     workers.length + tasks.length
+  }
+
+  def delete: Int = {
+    val deletedTasks = sql"delete from task".update.run.transact(xa).unsafeRunSync
+    val deletedWorkers = sql"delete from worker".update.run.transact(xa).unsafeRunSync
+    deletedTasks + deletedWorkers
   }
 }
