@@ -17,12 +17,12 @@ class DoobieTest extends FunSuite {
   val xa = Transactor.fromDriverManager[IO]( "org.h2.Driver", "jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1", "sa", "sa" )
   val schema = Source.fromInputStream(getClass.getResourceAsStream("/schema.sql")).mkString
 
-  test("ddl > insert > update > select") {
+  test("ddl > insert > update > select > delete") {
     assert(ddl(schema) == 0)
     assert((1, 2, 1, 2) == insert)
     assert(update == 1)
     assert(select == 4)
-    assert(delete == 4)
+    assert(delete == 2)
   }
 
   def ddl(schema: String): Int = {
@@ -41,7 +41,6 @@ class DoobieTest extends FunSuite {
       .withUniqueGeneratedKeys[Int]("id")
       .transact(xa)
       .unsafeRunSync
-
     val barneyTaskId = sql"insert into task(workerId, task) values($barneyId, 'clean pool')"
       .update
       .withUniqueGeneratedKeys[Int]("id")
@@ -52,7 +51,6 @@ class DoobieTest extends FunSuite {
       .withUniqueGeneratedKeys[Int]("id")
       .transact(xa)
       .unsafeRunSync
-
     (barneyId, fredId, barneyTaskId, fredTaskId)
   }
 
@@ -65,16 +63,12 @@ class DoobieTest extends FunSuite {
   def select: Int = {
     val workers = sql"select * from worker".query[Worker].to[List].transact(xa).unsafeRunSync
     val tasks = sql"select * from task".query[Task].to[List].transact(xa).unsafeRunSync
-
-    workers.foreach(println)
-    tasks.foreach(println)
-
     workers.length + tasks.length
   }
 
   def delete: Int = {
-    val deletedTasks = sql"delete from task".update.run.transact(xa).unsafeRunSync
-    val deletedWorkers = sql"delete from worker".update.run.transact(xa).unsafeRunSync
-    deletedTasks + deletedWorkers
+    val deleteTasks = sql"delete from task".update
+    val deleteWorkers = sql"delete from worker".update
+    (deleteTasks.run *> deleteWorkers.run).transact(xa).unsafeRunSync
   }
 }
