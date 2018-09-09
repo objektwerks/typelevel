@@ -10,25 +10,33 @@ import org.scalatest.FunSuite
 import scala.io.Source
 
 case class Worker(id: Int = 0, name: String)
-
 case class Task(id: Int = 0, workerId: Int, task: String)
 
 class DoobieTest extends FunSuite {
   val xa = Transactor.fromDriverManager[IO]( "org.h2.Driver", "jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1", "sa", "sa" )
   val schema = Source.fromInputStream(getClass.getResourceAsStream("/schema.sql")).mkString
 
-  test("ddl > insert > update > select > delete") {
+  test("ddl") {
     assert(ddl(schema) == 0)
+  }
+
+  test("insert") {
     assert((1, 2, 1, 2) == insert)
+  }
+
+  test("update") {
     assert(update == 1)
+  }
+
+  test("select") {
     assert(select == 4)
+  }
+
+  test("delete") {
     assert(delete == 2)
   }
 
-  def ddl(schema: String): Int = {
-    val ddl = Fragment.const(schema).update.run
-    ddl.transact(xa).unsafeRunSync
-  }
+  def ddl(schema: String): Int = Fragment.const(schema).update.run.transact(xa).unsafeRunSync
 
   def insert: (Int, Int, Int, Int) = {
     val barneyId = sql"insert into worker(name) values ('barney')"
