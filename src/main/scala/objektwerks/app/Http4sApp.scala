@@ -47,14 +47,16 @@ object Services {
   }
 }
 
-object NowHttp4sApp extends StreamApp[IO] {
+object Http4sApp extends StreamApp[IO] {
   import Services._
 
-  override def stream(args: List[String], requestShutdown: IO[Unit]): Stream[IO, ExitCode] =
+  override def stream(args: List[String], requestShutdown: IO[Unit]): Stream[IO, ExitCode] = {
+    sys.addShutdownHook(requestShutdown.unsafeRunSync)
     BlazeBuilder[IO]
       .bindHttp(7777)
       .mountService(indexServiceWithNoCacheHeader, "/")
       .mountService(resourceService, "/")
       .mountService(nowService, "/api/v1")
       .serve
+  }
 }
