@@ -2,6 +2,7 @@ package objektwerks.app
 
 import java.time.LocalTime
 
+import cats.data.Kleisli
 import cats.effect._
 import fs2.StreamApp.ExitCode
 import fs2.{Stream, StreamApp}
@@ -16,6 +17,7 @@ import org.http4s.server.blaze._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 case class Now(time: String = LocalTime.now.toString)
+
 object Now {
   implicit val nowDecoder = jsonOf[IO, Now]
 }
@@ -23,24 +25,24 @@ object Now {
 object Headers {
   val noCacheHeader = Header("Cache-Control", "no-cache, no-store, must-revalidate")
 
-  def addHeader(response: Response[IO], header: Header): Response[IO] = response match {
-    case Status.Successful(r) => r.putHeaders(header)
-    case r => r
+  def addHeader(service: HttpService[IO], header: Header): HttpService[IO] = Kleisli { request: Request[IO] =>
+    service(request).map {
+      case Status.Successful(response) => response.putHeaders(header)
+      case response => response
+    }
   }
 }
 
 object Services {
   import Headers._
 
-  val indexService = HttpService[IO] {
-    case request @ GET -> Root => StaticFile.fromResource("/index.html", Some(request)).getOrElseF(NotFound())
+  val webService = HttpService[IO] {
+    case request @ GET -> Root / path if List(".html", ".ico", ".png", ".css", ".js")
+      .exists(path.endsWith) => StaticFile.fromResource("/" + path, Some(request))
+      .getOrElseF(NotFound())
   }
-  val indexServiceWithNoCacheHeader = indexService.map(addHeader(_, noCacheHeader))
 
-  val resourceService = HttpService[IO] {
-    case request @ GET -> Root / path if List(".cache", ".ico", ".css", ".js").exists(path.endsWith) =>
-      StaticFile.fromResource("/" + path, Some(request)).getOrElseF(NotFound())
-  }
+  val webServiceWithNoCacheHeader = addHeader(webService, noCacheHeader)
 
   val nowService = HttpService[IO] {
     case GET -> Root / "now" => Ok(Now().asJson)
@@ -54,8 +56,7 @@ object Http4sApp extends StreamApp[IO] {
     sys.addShutdownHook(requestShutdown.unsafeRunSync)
     BlazeBuilder[IO]
       .bindHttp(7777)
-      .mountService(indexServiceWithNoCacheHeader, "/")
-      .mountService(resourceService, "/")
+      .mountService(webServiceWithNoCacheHeader, "/")
       .mountService(nowService, "/api/v1")
       .serve
   }
