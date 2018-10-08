@@ -22,27 +22,26 @@ object Now {
   implicit val nowDecoder = jsonOf[IO, Now]
 }
 
-object Headers {
-  val noCacheHeader = Header("Cache-Control", "no-cache, no-store, must-revalidate")
+object Services {
+  private val noCacheHeader = Header("Cache-Control", "no-cache, no-store, must-revalidate")
 
-  def addHeader(service: HttpService[IO], header: Header): HttpService[IO] = Kleisli { request: Request[IO] =>
+  private def addHeader(service: HttpService[IO], header: Header): HttpService[IO] = Kleisli { request: Request[IO] =>
     service(request).map {
       case Status.Successful(response) => response.putHeaders(header)
       case response => response
     }
   }
-}
+  private val indexService = HttpService[IO] {
+    case request @ GET -> Root => StaticFile.fromResource("/index.html", Some(request)).getOrElseF(NotFound())
+  }
+  val indexServiceWithNoCacheHeader = addHeader(indexService, noCacheHeader)
 
-object Services {
-  import Headers._
-
-  val webService = HttpService[IO] {
-    case request @ GET -> Root / path if List(".html", ".ico", ".png", ".css", ".js")
+  private val resourceService = HttpService[IO] {
+    case request @ GET -> Root / path if List(".ico", ".png", ".css", ".js")
       .exists(path.endsWith) => StaticFile.fromResource("/" + path, Some(request))
       .getOrElseF(NotFound())
   }
-
-  val webServiceWithNoCacheHeader = addHeader(webService, noCacheHeader)
+  val resourceServiceWithNoCacheHeader = addHeader(resourceService, noCacheHeader)
 
   val nowService = HttpService[IO] {
     case GET -> Root / "now" => Ok(Now().asJson)
@@ -50,14 +49,13 @@ object Services {
 }
 
 object Http4sApp extends StreamApp[IO] {
-  import Services._
-
   override def stream(args: List[String], requestShutdown: IO[Unit]): Stream[IO, ExitCode] = {
     sys.addShutdownHook(requestShutdown.unsafeRunSync)
     BlazeBuilder[IO]
       .bindHttp(7777)
-      .mountService(webServiceWithNoCacheHeader, "/")
-      .mountService(nowService, "/api/v1")
+      .mountService(Services.indexServiceWithNoCacheHeader, "/")
+      .mountService(Services.resourceServiceWithNoCacheHeader, "/")
+      .mountService(Services.nowService, "/api/v1")
       .serve
   }
 }
