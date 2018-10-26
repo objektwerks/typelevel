@@ -3,6 +3,7 @@ organization := "objektwerks"
 version := "0.1-SNAPSHOT"
 scalaVersion := "2.12.7"
 libraryDependencies ++= {
+  // cats-effect and fs2-core require http4s 0.19, which is still a WIP!!!s
   val catsVersion = "1.4.0"
   val doobieVersion = "0.5.3"
   val http4sVersion = "0.18.20"
