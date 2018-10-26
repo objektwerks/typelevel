@@ -6,7 +6,7 @@ libraryDependencies ++= {
   val catsVersion = "1.4.0"
   val doobieVersion = "0.5.3"
   val http4sVersion = "0.18.16"
-  val circeVersion = "0.9.3"
+  val circeVersion = "0.10.0"
   Seq(
     "org.typelevel" % "cats-core_2.12" % catsVersion,
     "org.typelevel" % "cats-free_2.12" % catsVersion,
