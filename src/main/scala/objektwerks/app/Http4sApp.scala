@@ -12,6 +12,7 @@ import org.http4s._
 import org.http4s.circe._
 import org.http4s.dsl.impl.Root
 import org.http4s.dsl.io._
+import org.http4s.server.Router
 import org.http4s.server.blaze._
 
 import scala.concurrent.ExecutionContext
@@ -54,8 +55,6 @@ object Routes {
   private val nowRoute = HttpRoutes.of[IO] {
     case GET -> Root / "now" => Ok(Now().asJson)
   }
-
-  import org.http4s.server.Router
 
   val routes = Router("/" -> indexRouteWithNoCacheHeader,
                       "/" -> resourceRouteWithNoCacheHeader,
