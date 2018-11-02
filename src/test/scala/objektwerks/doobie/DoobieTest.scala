@@ -4,15 +4,16 @@ import cats.effect._
 import cats.implicits._
 import doobie._
 import doobie.implicits._
-
 import org.scalatest.FunSuite
 
+import scala.concurrent.ExecutionContext
 import scala.io.Source
 
 case class Worker(id: Int = 0, name: String)
 case class Task(id: Int = 0, workerId: Int, task: String)
 
 class DoobieTest extends FunSuite {
+  implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
   val xa = Transactor.fromDriverManager[IO]( "org.h2.Driver", "jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1", "sa", "sa" )
   val schema = Source.fromInputStream(getClass.getResourceAsStream("/schema.sql")).mkString
 

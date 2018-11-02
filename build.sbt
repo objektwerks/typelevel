@@ -3,15 +3,14 @@ organization := "objektwerks"
 version := "0.1-SNAPSHOT"
 scalaVersion := "2.12.7"
 libraryDependencies ++= {
-  // cats-effect (1.0.0), fs2-core (1.0.0) and doobie (0.6.0) require http4s 0.19, which is still a WIP!!!
   val catsVersion = "1.4.0"
-  val doobieVersion = "0.5.3"
-  val http4sVersion = "0.18.20"
+  val doobieVersion = "0.6.0"
+  val http4sVersion = "0.20.0-M1"
   val circeVersion = "0.10.0"
   Seq(
     "org.typelevel" % "cats-core_2.12" % catsVersion,
     "org.typelevel" % "cats-free_2.12" % catsVersion,
-    "org.typelevel" % "cats-effect_2.12" % "0.10.1",
+    "org.typelevel" % "cats-effect_2.12" % "1.0.0",
     "io.circe" % "circe-core_2.12" % circeVersion,
     "io.circe" % "circe-generic_2.12" % circeVersion,
     "io.monix" % "monix_2.12" % "2.3.3",
@@ -23,7 +22,7 @@ libraryDependencies ++= {
     "org.http4s" % "http4s-circe_2.12" % http4sVersion,
     "org.http4s" % "http4s-dsl_2.12" % http4sVersion,
     "org.http4s" % "http4s-server_2.12" % http4sVersion,
-    "co.fs2" % "fs2-core_2.12" % "0.10.6",
+    "co.fs2" % "fs2-core_2.12" % "1.0.0",
     "ch.qos.logback" % "logback-classic" % "1.2.3",
     "org.scalatest" % "scalatest_2.12" % "3.0.5" % "test"
   )
