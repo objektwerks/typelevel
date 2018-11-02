@@ -4,8 +4,10 @@ import java.time.LocalTime
 import java.util.concurrent.Executors
 
 import cats.effect._
+
 import io.circe.generic.auto._
 import io.circe.syntax._
+
 import org.http4s._
 import org.http4s.circe._
 import org.http4s.client.{Client, JavaNetClientBuilder}

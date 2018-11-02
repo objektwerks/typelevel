@@ -6,8 +6,10 @@ import java.util.concurrent.Executors
 import cats.data.Kleisli
 import cats.effect._
 import cats.implicits._
+
 import io.circe.generic.auto._
 import io.circe.syntax._
+
 import org.http4s._
 import org.http4s.circe._
 import org.http4s.dsl.impl.Root
