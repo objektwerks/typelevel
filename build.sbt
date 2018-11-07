@@ -5,7 +5,7 @@ scalaVersion := "2.12.7"
 libraryDependencies ++= {
   val catsVersion = "1.4.0"
   val doobieVersion = "0.6.0"
-  val http4sVersion = "0.20.0-M1"
+  val http4sVersion = "0.20.0-M2"
   val circeVersion = "0.10.0"
   Seq(
     "org.typelevel" % "cats-core_2.12" % catsVersion,

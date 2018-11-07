@@ -4,14 +4,13 @@ import java.time.LocalTime
 import java.util.concurrent.Executors
 
 import cats.effect._
-
 import io.circe.generic.auto._
 import io.circe.syntax._
-
 import org.http4s._
 import org.http4s.circe._
 import org.http4s.client.{Client, JavaNetClientBuilder}
 import org.http4s.dsl.io._
+import org.http4s.implicits._
 import org.http4s.server.Router
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
@@ -64,21 +63,21 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("client-server get") {
-    val get = Request[IO](Method.GET, uri("http://localhost:7979/now"))
+    val get = Request[IO](Method.GET, Uri.uri("http://localhost:7979/now"))
     val now = client.expect[Now](get).unsafeRunSync
     assert(now.time.nonEmpty)
     println(s"current time: ${now.time}")
   }
 
   test("client-server post") {
-    val post = Request[IO](Method.POST, uri("http://localhost:7979/message")).withEntity(Message("Prost!").asJson)
+    val post = Request[IO](Method.POST, Uri.uri("http://localhost:7979/message")).withEntity(Message("Prost!").asJson)
     val message = client.expect[Message](post).unsafeRunSync
     assert(message.text.nonEmpty)
     println(message.text)
   }
 
   test("serverless get") {
-    val get = Request[IO](Method.GET, uri("/now"))
+    val get = Request[IO](Method.GET, Uri.uri("/now"))
     val io = nowRoute.orNotFound.run(get)
     val now = io.unsafeRunSync().as[Now].unsafeRunSync
     assert(now.time.nonEmpty)
@@ -86,7 +85,7 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
   }
 
   test("serverless post") {
-    val post = Request[IO](Method.POST, uri("/message")).withEntity(Message("Prost!").asJson)
+    val post = Request[IO](Method.POST, Uri.uri("/message")).withEntity(Message("Prost!").asJson)
     val io = messageRoute.orNotFound.run(post)
     val message = io.unsafeRunSync().as[Message].unsafeRunSync
     assert(message.text.nonEmpty)
