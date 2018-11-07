@@ -28,8 +28,8 @@ object Now {
 object Headers {
   val noCacheHeader = Header("Cache-Control", "no-cache, no-store, must-revalidate")
 
-  def addHeader(service: HttpRoutes[IO], header: Header): HttpRoutes[IO] = Kleisli { request: Request[IO] =>
-    service(request).map {
+  def addHeader(route: HttpRoutes[IO], header: Header): HttpRoutes[IO] = Kleisli { request: Request[IO] =>
+    route(request).map {
       case Status.Successful(response) => response.putHeaders(header)
       case response => response
     }
@@ -47,12 +47,12 @@ object Routes {
   }
   private val indexRouteWithNoCacheHeader = addHeader(indexRoute, noCacheHeader)
 
-  private val resourceService = HttpRoutes.of[IO] {
+  private val resourceRoute = HttpRoutes.of[IO] {
     case request @ GET -> Root / path if List(".ico", ".png", ".css", ".js")
       .exists(path.endsWith) => StaticFile.fromResource("/" + path, blockingEc, Some(request))
       .getOrElseF(NotFound())
   }
-  private val resourceRouteWithNoCacheHeader = addHeader(resourceService, noCacheHeader)
+  private val resourceRouteWithNoCacheHeader = addHeader(resourceRoute, noCacheHeader)
 
   private val nowRoute = HttpRoutes.of[IO] {
     case GET -> Root / "now" => Ok(Now().asJson)
