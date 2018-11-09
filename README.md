@@ -4,5 +4,5 @@ Typelevel
 
 Http4s App
 ----------
-1. sbt clean test run ( [info] Running objektwerks.app.NowHttp4sApp )
+1. sbt clean test run ( [info] Running objektwerks.app.Http4sApp )
 2. surf to: http://localhost:7777
