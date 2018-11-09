@@ -19,9 +19,8 @@ libraryDependencies ++= {
     "org.tpolecat" % "doobie-h2_2.12" % doobieVersion,
     "org.http4s" % "http4s-blaze-client_2.12" % http4sVersion,
     "org.http4s" % "http4s-blaze-server_2.12" % http4sVersion,
-    "org.http4s" % "http4s-circe_2.12" % http4sVersion,
     "org.http4s" % "http4s-dsl_2.12" % http4sVersion,
-    "org.http4s" % "http4s-server_2.12" % http4sVersion,
+    "org.http4s" % "http4s-circe_2.12" % http4sVersion,
     "co.fs2" % "fs2-core_2.12" % "1.0.0",
     "ch.qos.logback" % "logback-classic" % "1.2.3",
     "org.scalatest" % "scalatest_2.12" % "3.0.5" % "test"

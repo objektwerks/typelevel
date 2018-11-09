@@ -47,7 +47,7 @@ object Routes {
   private val indexRouteWithNoCacheHeader = addHeader(indexRoute, noCacheHeader)
 
   private val resourceRoute = HttpRoutes.of[IO] {
-    case request @ GET -> Root / path if List(".ico", ".png", ".css", ".js")
+    case request @ GET -> Root / path if List(".ico", ".css", ".js")
       .exists(path.endsWith) => StaticFile.fromResource("/" + path, blockingEc, Some(request))
       .getOrElseF(NotFound())
   }
@@ -57,7 +57,7 @@ object Routes {
     case GET -> Root / "now" => Ok(Now().asJson)
   }
 
-  val routes = Router("/" -> indexRouteWithNoCacheHeader,
+  val routes = Router("" -> indexRouteWithNoCacheHeader,
                       "/" -> resourceRouteWithNoCacheHeader,
                       "/api/v1" -> nowRoute).orNotFound
 }
