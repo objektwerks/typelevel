@@ -42,7 +42,8 @@ object Routes {
   private implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
 
   private val indexRoute = HttpRoutes.of[IO] {
-    case request @ GET -> Root => StaticFile.fromResource("/index.html", blockingEc, Some(request)).getOrElseF(NotFound())
+    case request @ GET -> Root => StaticFile.fromResource("/index.html", blockingEc, Some(request))
+      .getOrElseF(NotFound())
   }
   private val indexRouteWithNoCacheHeader = addHeader(indexRoute, noCacheHeader)
 
