@@ -1,21 +1,18 @@
 package objektwerks.http4s
 
 import java.time.LocalTime
-import java.util.concurrent.Executors
 
 import cats.effect._
 import io.circe.generic.auto._
 import io.circe.syntax._
 import org.http4s._
 import org.http4s.circe._
-import org.http4s.client.{Client, JavaNetClientBuilder}
+import org.http4s.client.blaze.BlazeClientBuilder
 import org.http4s.dsl.io._
 import org.http4s.implicits._
 import org.http4s.server.Router
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
-
-import scala.concurrent.ExecutionContext
 
 case class Now(time: String = LocalTime.now.toString)
 object Now {
@@ -55,8 +52,6 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
     .start
     .unsafeRunSync()
 
-  val blockingEC = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(5))
-  val client: Client[IO] = JavaNetClientBuilder(blockingEC).create
 
   override protected def afterAll(): Unit = {
     server.cancel.unsafeRunSync()
@@ -64,16 +59,22 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
 
   test("client-server get") {
     val get = Request[IO](Method.GET, Uri.uri("http://localhost:7979/now"))
-    val now = client.expect[Now](get).unsafeRunSync
-    assert(now.time.nonEmpty)
-    println(s"current time: ${now.time}")
+    BlazeClientBuilder[IO](global).resource.use { client =>
+      val now = client.expect[Now](get).unsafeRunSync()
+      assert(now.time.nonEmpty)
+      println(s"current time: ${now.time}")
+      IO.unit
+    }
   }
 
   test("client-server post") {
     val post = Request[IO](Method.POST, Uri.uri("http://localhost:7979/message")).withEntity(Message("Prost!").asJson)
-    val message = client.expect[Message](post).unsafeRunSync
-    assert(message.text.nonEmpty)
-    println(message.text)
+    BlazeClientBuilder[IO](global).resource.use { client =>
+      val message = client.expect[Message](post).unsafeRunSync
+      assert(message.text.nonEmpty)
+      println(message.text)
+      IO.unit
+    }
   }
 
   test("serverless get") {
