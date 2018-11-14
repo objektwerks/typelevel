@@ -34,12 +34,11 @@ object Routes {
       response <- Ok(Message(s"client: ${message.text}  server: Cheers!").asJson)
     } yield response
   }
-  val routes = Router("/" -> nowRoute, "/" -> messageRoute).orNotFound
+  val routes = Router("/now" -> nowRoute, "/message" -> messageRoute).orNotFound
 }
 
 class Http4sTest extends FunSuite with BeforeAndAfterAll {
   import Routes._
-
   import scala.concurrent.ExecutionContext.Implicits.global
 
   implicit val cs: ContextShift[IO] = IO.contextShift(global)
@@ -51,7 +50,6 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
     .resource.use(_ => IO.never)
     .start
     .unsafeRunSync()
-
 
   override protected def afterAll(): Unit = {
     server.cancel.unsafeRunSync()
