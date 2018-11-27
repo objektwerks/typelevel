@@ -2,8 +2,6 @@ package objektwerks.cats
 
 import org.scalatest.{FunSuite, Matchers}
 
-import scala.util.Try
-
 class MonadTest extends FunSuite with Matchers {
   test("monad") {
     import cats.Monad
@@ -14,6 +12,7 @@ class MonadTest extends FunSuite with Matchers {
     import cats.syntax.functor._
     import cats.syntax.flatMap._
     import cats.Id
+    import scala.util.Try
 
     val square = (i: Int) => i * i
     val cube = (i: Int) => Some(i * i * i)

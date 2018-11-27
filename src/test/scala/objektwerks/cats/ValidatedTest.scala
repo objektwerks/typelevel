@@ -2,13 +2,12 @@ package objektwerks.cats
 
 import org.scalatest.{FunSuite, Matchers}
 
-import scala.util.Try
-
 class ValidatedTest extends FunSuite with Matchers {
   test("validated") {
     import cats.data.Validated._
     import cats.data.Validated.{Invalid, Valid}
     import cats.syntax.validated._
+    import scala.util.Try
 
     valid[String, Int](3) shouldBe Valid(3)
     invalid[String, Int]("three") shouldBe Invalid("three")

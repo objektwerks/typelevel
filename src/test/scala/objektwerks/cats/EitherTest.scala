@@ -2,11 +2,10 @@ package objektwerks.cats
 
 import org.scalatest.{FunSuite, Matchers}
 
-import scala.util.Try
-
 class EitherTest extends FunSuite with Matchers {
   test("either") {
     import cats.syntax.either._
+    import scala.util.Try
 
     val z = for {
       x <- 1.asRight
