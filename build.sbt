@@ -3,14 +3,14 @@ organization := "objektwerks"
 version := "0.1-SNAPSHOT"
 scalaVersion := "2.12.7"
 libraryDependencies ++= {
-  val catsVersion = "1.5.0-RC1"
+  val catsVersion = "1.5.0"
   val doobieVersion = "0.6.0"
-  val http4sVersion = "0.20.0-M3"
+  val http4sVersion = "0.20.0-M4"
   val circeVersion = "0.10.1"
   Seq(
     "org.typelevel" % "cats-core_2.12" % catsVersion,
     "org.typelevel" % "cats-free_2.12" % catsVersion,
-    "org.typelevel" % "cats-effect_2.12" % "1.0.0",
+    "org.typelevel" % "cats-effect_2.12" % "1.1.0",
     "io.circe" % "circe-core_2.12" % circeVersion,
     "io.circe" % "circe-generic_2.12" % circeVersion,
     "io.monix" % "monix_2.12" % "2.3.3",
