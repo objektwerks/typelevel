@@ -13,4 +13,12 @@ class ResourceTest extends FunSuite with Matchers {
       .use(source => IO( source.mkString.nonEmpty shouldBe true) )
       .unsafeRunSync()
   }
+
+  test("bracket") {
+    IO( Source.fromFile("build.sbt") ).bracket {
+      file => IO( file.mkString.nonEmpty shouldBe true )
+    } {
+      file => IO( file.close() )
+    }
+  }
 }
