@@ -20,6 +20,15 @@ class DoobieTest extends FunSuite with IOChecker {
   val xa = Transactor.fromDriverManager[IO]( "org.h2.Driver", "jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1", "sa", "sa" )
   val schema = Source.fromInputStream(getClass.getResourceAsStream("/schema.sql")).mkString
 
+  val insertBarney = sql"insert into worker(name) values ('barney')".update
+  val insertFred = sql"insert into worker(name) values('fred')".update
+  val updateBarney = sql"update worker set name = 'barney rebel' where name = 'barney'".update
+  val updateFred = sql"update worker set name = 'fred flintstone' where name = 'fred'".update
+  val selectWorkers = sql"select * from worker".query[Worker]
+  val selectTasks = sql"select * from task".query[Task]
+  val deleteTasks = sql"delete from task".update
+  val deleteWorkers = sql"delete from worker".update
+
   override def transactor: Transactor[IO] = xa
 
   test("ddl") {
@@ -43,53 +52,47 @@ class DoobieTest extends FunSuite with IOChecker {
   }
 
   test("check") {
-    val workers = sql"select * from worker".query[Worker]
-    val tasks = sql"select * from task".query[Task]
-    check(workers)
-    check(tasks)
+    check(insertBarney)
+    check(insertFred)
+    check(selectWorkers)
+    check(selectTasks)
+    check(deleteWorkers)
+    check(deleteTasks)
   }
 
   def ddl(schema: String): Int = Fragment.const(schema).update.run.transact(xa).unsafeRunSync
 
   def insert: (Int, Int, Int, Int) = {
-    val barneyId = sql"insert into worker(name) values ('barney')"
-      .update
+    val barneyId = insertBarney
       .withUniqueGeneratedKeys[Int]("id")
       .transact(xa)
       .unsafeRunSync
-    val fredId = sql"insert into worker(name) values('fred')"
-      .update
+    val fredId =insertFred
       .withUniqueGeneratedKeys[Int]("id")
       .transact(xa)
       .unsafeRunSync
-    val barneyTaskId = sql"insert into task(workerId, task) values($barneyId, 'clean pool')"
-      .update
+    val insertBarneyTask = sql"insert into task(workerId, task) values($barneyId, 'clean pool')".update
+    val insertFredTask = sql"insert into task(workerId, task) values($fredId, 'clean pool')".update
+    check(insertBarneyTask)
+    check(insertFredTask)
+    val barneyTaskId = insertBarneyTask
       .withUniqueGeneratedKeys[Int]("id")
       .transact(xa)
       .unsafeRunSync
-    val fredTaskId = sql"insert into task(workerId, task) values($fredId, 'clean pool')"
-      .update
+    val fredTaskId = insertFredTask
       .withUniqueGeneratedKeys[Int]("id")
       .transact(xa)
       .unsafeRunSync
     (barneyId, fredId, barneyTaskId, fredTaskId)
   }
 
-  def update: Int = {
-    val barneyUpdate = sql"update worker set name = 'barney rebel' where name = 'barney'".update
-    val fredUpdate = sql"update worker set name = 'fred flintstone' where name = 'fred'".update
-    (barneyUpdate.run *> fredUpdate.run).transact(xa).unsafeRunSync
-  }
+  def update: Int = (updateBarney.run *> updateFred.run).transact(xa).unsafeRunSync
 
   def select: Int = {
-    val workers = sql"select * from worker".query[Worker].to[List].transact(xa).unsafeRunSync
-    val tasks = sql"select * from task".query[Task].to[List].transact(xa).unsafeRunSync
+    val workers = selectWorkers.to[List].transact(xa).unsafeRunSync
+    val tasks = selectTasks.to[List].transact(xa).unsafeRunSync
     workers.length + tasks.length
   }
 
-  def delete: Int = {
-    val deleteTasks = sql"delete from task".update
-    val deleteWorkers = sql"delete from worker".update
-    (deleteTasks.run *> deleteWorkers.run).transact(xa).unsafeRunSync
-  }
+  def delete: Int = (deleteTasks.run *> deleteWorkers.run).transact(xa).unsafeRunSync
 }
