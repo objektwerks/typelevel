@@ -20,12 +20,15 @@ class DoobieTest extends FunSuite with IOChecker {
   val xa = Transactor.fromDriverManager[IO]( "org.h2.Driver", "jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1", "sa", "sa" )
   val schema = Source.fromInputStream(getClass.getResourceAsStream("/schema.sql")).mkString
 
-  val insertBarney = sql"insert into worker(name) values ('barney')".update
-  val insertFred = sql"insert into worker(name) values('fred')".update
+  val insertWorker = Update[String]("insert into worker(name) values(?)")
+  val insertTask = Update[(Int, String)]("insert into task(workerId, task) values(?, ?)")
+
   val updateBarney = sql"update worker set name = 'barney rebel' where name = 'barney'".update
   val updateFred = sql"update worker set name = 'fred flintstone' where name = 'fred'".update
+
   val selectWorkers = sql"select * from worker".query[Worker]
   val selectTasks = sql"select * from task".query[Task]
+
   val deleteTasks = sql"delete from task".update
   val deleteWorkers = sql"delete from worker".update
 
@@ -52,8 +55,8 @@ class DoobieTest extends FunSuite with IOChecker {
   }
 
   test("check") {
-    check(insertBarney)
-    check(insertFred)
+    check(insertWorker)
+    check(insertTask)
     check(selectWorkers)
     check(selectTasks)
     check(deleteWorkers)
@@ -63,23 +66,19 @@ class DoobieTest extends FunSuite with IOChecker {
   def ddl(schema: String): Int = Fragment.const(schema).update.run.transact(xa).unsafeRunSync
 
   def insert: (Int, Int, Int, Int) = {
-    val barneyId = insertBarney
+    val barneyId = insertWorker.toUpdate0("barney")
       .withUniqueGeneratedKeys[Int]("id")
       .transact(xa)
       .unsafeRunSync
-    val fredId =insertFred
+    val fredId =insertWorker.toUpdate0("fred")
       .withUniqueGeneratedKeys[Int]("id")
       .transact(xa)
       .unsafeRunSync
-    val insertBarneyTask = sql"insert into task(workerId, task) values($barneyId, 'clean pool')".update
-    val insertFredTask = sql"insert into task(workerId, task) values($fredId, 'clean pool')".update
-    check(insertBarneyTask)
-    check(insertFredTask)
-    val barneyTaskId = insertBarneyTask
+    val barneyTaskId = insertTask.toUpdate0((barneyId, "clean pool"))
       .withUniqueGeneratedKeys[Int]("id")
       .transact(xa)
       .unsafeRunSync
-    val fredTaskId = insertFredTask
+    val fredTaskId = insertTask.toUpdate0((fredId, "clean car"))
       .withUniqueGeneratedKeys[Int]("id")
       .transact(xa)
       .unsafeRunSync
