@@ -6,11 +6,11 @@ libraryDependencies ++= {
   val catsVersion = "1.5.0"
   val doobieVersion = "0.6.0"
   val http4sVersion = "0.20.0-M5"
-  val circeVersion = "0.11.0"
+  val circeVersion = "0.11.1"
   Seq(
     "org.typelevel" % "cats-core_2.12" % catsVersion,
     "org.typelevel" % "cats-free_2.12" % catsVersion,
-    "org.typelevel" % "cats-effect_2.12" % "1.1.0",
+    "org.typelevel" % "cats-effect_2.12" % "1.2.0",
     "io.circe" % "circe-core_2.12" % circeVersion,
     "io.circe" % "circe-generic_2.12" % circeVersion,
     "io.monix" % "monix_2.12" % "2.3.3",
