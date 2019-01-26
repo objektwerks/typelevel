@@ -8,21 +8,22 @@ libraryDependencies ++= {
   val http4sVersion = "0.20.0-M5"
   val circeVersion = "0.11.1"
   Seq(
-    "org.typelevel" % "cats-core_2.12" % catsVersion,
-    "org.typelevel" % "cats-free_2.12" % catsVersion,
-    "org.typelevel" % "cats-effect_2.12" % "1.2.0",
-    "io.circe" % "circe-core_2.12" % circeVersion,
-    "io.circe" % "circe-generic_2.12" % circeVersion,
-    "io.monix" % "monix_2.12" % "2.3.3",
-    "com.chuusai" % "shapeless_2.12" % "2.3.3",
-    "org.tpolecat" % "doobie-core_2.12" % doobieVersion,
-    "org.tpolecat" % "doobie-h2_2.12" % doobieVersion,
-    "org.http4s" % "http4s-blaze-client_2.12" % http4sVersion,
-    "org.http4s" % "http4s-blaze-server_2.12" % http4sVersion,
-    "org.http4s" % "http4s-dsl_2.12" % http4sVersion,
-    "org.http4s" % "http4s-circe_2.12" % http4sVersion,
-    "co.fs2" % "fs2-core_2.12" % "1.0.0",
+    "org.typelevel" %% "cats-core" % catsVersion,
+    "org.typelevel" %% "cats-free" % catsVersion,
+    "org.typelevel" %% "cats-effect" % "1.2.0",
+    "io.circe" %% "circe-core" % circeVersion,
+    "io.circe" %% "circe-generic" % circeVersion,
+    "io.monix" %% "monix" % "2.3.3",
+    "com.chuusai" %% "shapeless" % "2.3.3",
+    "org.tpolecat" %% "doobie-core" % doobieVersion,
+    "org.tpolecat" %% "doobie-h2" % doobieVersion,
+    "org.http4s" %% "http4s-blaze-client" % http4sVersion,
+    "org.http4s" %% "http4s-blaze-server" % http4sVersion,
+    "org.http4s" %% "http4s-dsl" % http4sVersion,
+    "org.http4s" %% "http4s-circe" % http4sVersion,
+    "co.fs2" %% "fs2-core" % "1.0.0",
     "ch.qos.logback" % "logback-classic" % "1.2.3",
-    "org.scalatest" % "scalatest_2.12" % "3.0.5" % "test"
+    "org.tpolecat" %% "doobie-scalatest" % doobieVersion % "test",
+    "org.scalatest" %% "scalatest" % "3.0.5" % "test"
   )
 }

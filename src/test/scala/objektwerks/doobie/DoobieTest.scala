@@ -2,8 +2,11 @@ package objektwerks.doobie
 
 import cats.effect._
 import cats.implicits._
+import cats.effect.IO
 import doobie._
 import doobie.implicits._
+import doobie.scalatest._
+import doobie.util.transactor.Transactor
 import org.scalatest.FunSuite
 
 import scala.concurrent.ExecutionContext
@@ -12,10 +15,12 @@ import scala.io.Source
 case class Worker(id: Int = 0, name: String)
 case class Task(id: Int = 0, workerId: Int, task: String)
 
-class DoobieTest extends FunSuite {
+class DoobieTest extends FunSuite with IOChecker {
   implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
   val xa = Transactor.fromDriverManager[IO]( "org.h2.Driver", "jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1", "sa", "sa" )
   val schema = Source.fromInputStream(getClass.getResourceAsStream("/schema.sql")).mkString
+
+  override def transactor: Transactor[IO] = xa
 
   test("ddl") {
     assert(ddl(schema) == 0)
@@ -35,6 +40,13 @@ class DoobieTest extends FunSuite {
 
   test("delete") {
     assert(delete == 2)
+  }
+
+  test("check") {
+    val workers = sql"select * from worker".query[Worker]
+    val tasks = sql"select * from task".query[Task]
+    check(workers)
+    check(tasks)
   }
 
   def ddl(schema: String): Int = Fragment.const(schema).update.run.transact(xa).unsafeRunSync
