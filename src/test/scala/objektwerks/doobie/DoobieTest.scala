@@ -23,8 +23,7 @@ class DoobieTest extends FunSuite with IOChecker {
   val insertWorker = Update[String]("insert into worker(name) values(?)")
   val insertTask = Update[(Int, String)]("insert into task(workerId, task) values(?, ?)")
 
-  val updateBarney = sql"update worker set name = 'barney rebel' where name = 'barney'".update
-  val updateFred = sql"update worker set name = 'fred flintstone' where name = 'fred'".update
+  val updateWorker = Update[(String, String)]("update worker set name = ? where name = ?")
 
   val selectWorkers = sql"select * from worker".query[Worker]
   val selectTasks = sql"select * from task".query[Task]
@@ -57,6 +56,7 @@ class DoobieTest extends FunSuite with IOChecker {
   test("check") {
     check(insertWorker)
     check(insertTask)
+    check(updateWorker)
     check(selectWorkers)
     check(selectTasks)
     check(deleteWorkers)
@@ -85,7 +85,10 @@ class DoobieTest extends FunSuite with IOChecker {
     (barneyId, fredId, barneyTaskId, fredTaskId)
   }
 
-  def update: Int = (updateBarney.run *> updateFred.run).transact(xa).unsafeRunSync
+  def update: Int = (updateWorker.toUpdate0(("barney rebel", "barney"))
+    .run *> updateWorker.toUpdate0(("fred flintstone", "fred")).run)
+    .transact(xa)
+    .unsafeRunSync
 
   def select: Int = {
     val workers = selectWorkers.to[List].transact(xa).unsafeRunSync
