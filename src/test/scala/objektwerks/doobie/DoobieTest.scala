@@ -1,8 +1,7 @@
 package objektwerks.doobie
 
-import cats.effect._
+import cats.effect.{IO, _}
 import cats.implicits._
-import cats.effect.IO
 import doobie._
 import doobie.implicits._
 import doobie.scalatest._
