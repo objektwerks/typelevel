@@ -3,9 +3,9 @@ organization := "objektwerks"
 version := "0.1-SNAPSHOT"
 scalaVersion := "2.12.8"
 libraryDependencies ++= {
-  val catsVersion = "1.6.0"
+  val catsVersion = "1.6.1"
   val doobieVersion = "0.6.0"
-  val http4sVersion = "0.20.0"
+  val http4sVersion = "0.20.6"
   val circeVersion = "0.11.1"
   Seq(
     "org.typelevel" %% "cats-core" % catsVersion,
@@ -24,6 +24,6 @@ libraryDependencies ++= {
     "co.fs2" %% "fs2-core" % "1.0.0",
     "ch.qos.logback" % "logback-classic" % "1.2.3",
     "org.tpolecat" %% "doobie-scalatest" % doobieVersion % Test,
-    "org.scalatest" %% "scalatest" % "3.0.5" % Test
+    "org.scalatest" %% "scalatest" % "3.0.8" % Test
   )
 }
