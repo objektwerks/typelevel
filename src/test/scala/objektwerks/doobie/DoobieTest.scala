@@ -62,38 +62,57 @@ class DoobieTest extends FunSuite with IOChecker {
     check(deleteTasks)
   }
 
-  def ddl(schema: String): Int = Fragment.const(schema).update.run.transact(xa).unsafeRunSync
+  def ddl(schema: String): Int = Fragment
+    .const(schema)
+    .update
+    .run
+    .transact(xa)
+    .unsafeRunSync
 
   def insert: (Int, Int, Int, Int) = {
-    val barneyId = insertWorker.toUpdate0("barney")
+    val barneyId = insertWorker
+      .toUpdate0("barney")
       .withUniqueGeneratedKeys[Int]("id")
       .transact(xa)
       .unsafeRunSync
-    val fredId =insertWorker.toUpdate0("fred")
+    val fredId =insertWorker
+      .toUpdate0("fred")
       .withUniqueGeneratedKeys[Int]("id")
       .transact(xa)
       .unsafeRunSync
-    val barneyTaskId = insertTask.toUpdate0((barneyId, "clean pool"))
+    val barneyTaskId = insertTask
+      .toUpdate0((barneyId, "clean pool"))
       .withUniqueGeneratedKeys[Int]("id")
       .transact(xa)
       .unsafeRunSync
-    val fredTaskId = insertTask.toUpdate0((fredId, "clean car"))
+    val fredTaskId = insertTask
+      .toUpdate0((fredId, "clean car"))
       .withUniqueGeneratedKeys[Int]("id")
       .transact(xa)
       .unsafeRunSync
     (barneyId, fredId, barneyTaskId, fredTaskId)
   }
 
-  def update: Int = (updateWorker.toUpdate0(("barney rebel", "barney"))
+  def update: Int = (updateWorker
+    .toUpdate0(("barney rebel", "barney"))
     .run *> updateWorker.toUpdate0(("fred flintstone", "fred")).run)
     .transact(xa)
     .unsafeRunSync
 
   def select: Int = {
-    val workers = selectWorkers.to[List].transact(xa).unsafeRunSync
-    val tasks = selectTasks.to[List].transact(xa).unsafeRunSync
+    val workers = selectWorkers
+      .to[List]
+      .transact(xa)
+      .unsafeRunSync
+    val tasks = selectTasks
+      .to[List]
+      .transact(xa)
+      .unsafeRunSync
     workers.length + tasks.length
   }
 
-  def delete: Int = (deleteTasks.run *> deleteWorkers.run).transact(xa).unsafeRunSync
+  def delete: Int = (deleteTasks
+    .run *> deleteWorkers.run)
+    .transact(xa)
+    .unsafeRunSync
 }
