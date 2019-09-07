@@ -13,8 +13,6 @@ libraryDependencies ++= {
     "org.typelevel" %% "cats-effect" % "1.2.0",
     "io.circe" %% "circe-core" % circeVersion,
     "io.circe" %% "circe-generic" % circeVersion,
-    "io.monix" %% "monix" % "2.3.3",
-    "com.chuusai" %% "shapeless" % "2.3.3",
     "org.tpolecat" %% "doobie-core" % doobieVersion,
     "org.tpolecat" %% "doobie-h2" % doobieVersion,
     "org.http4s" %% "http4s-blaze-client" % http4sVersion,
