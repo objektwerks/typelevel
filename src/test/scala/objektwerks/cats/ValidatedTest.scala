@@ -56,6 +56,6 @@ class ValidatedTest extends FunSuite with Matchers with ProfileValidator {
     validateProfile(validProfile.user, validProfile.password).isValid shouldBe true
 
     val invalidProfile = Profile("typelevel", "typelevel")
-    validateProfile(invalidProfile.user, invalidProfile.password).isValid shouldBe false
+    validateProfile(invalidProfile.user, invalidProfile.password).isInvalid shouldBe true
   }
 }
