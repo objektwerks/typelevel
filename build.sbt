@@ -10,7 +10,7 @@ libraryDependencies ++= {
   Seq(
     "org.typelevel" %% "cats-core" % catsVersion,
     "org.typelevel" %% "cats-free" % catsVersion,
-    "org.typelevel" %% "cats-effect" % "1.2.0",
+    "org.typelevel" %% "cats-effect" % "2.1.1",
     "io.circe" %% "circe-core" % circeVersion,
     "io.circe" %% "circe-generic" % circeVersion,
     "org.tpolecat" %% "doobie-core" % doobieVersion,
