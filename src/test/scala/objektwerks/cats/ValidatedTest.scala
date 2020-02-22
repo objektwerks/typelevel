@@ -37,18 +37,25 @@ sealed trait ProfileValidator {
 }
 
 class ValidatedTest extends FunSuite with Matchers with ProfileValidator {
-  test("valid > invalid") {
+  test("valid ") {
     valid[String, Int](3) shouldBe Valid(3)
+    3.valid.map(_ * 3) shouldBe Valid(9)
+  }
+
+  test("invalid") {
     invalid[String, Int]("three") shouldBe Invalid("three")
+    "three".invalid[Int] shouldBe Invalid("three")
+  }
+
+  test("catch") {
     catchOnly[NumberFormatException]("three".toInt).isInvalid shouldBe true
     catchNonFatal(sys.error("Nonfatal")).isInvalid shouldBe true
+  }
+
+  test("from") {
     fromTry(Try("three".toInt)).isInvalid shouldBe true
     fromEither[String, Int](Left("Error")).isInvalid shouldBe true
     fromOption[String, Int](None, "Error").isInvalid shouldBe true
-
-    3.valid.map(_ * 3) shouldBe Valid(9)
-    3.valid[String] shouldBe Valid(3)
-    "three".invalid[Int] shouldBe Invalid("three")
   }
 
   test("validator") {
