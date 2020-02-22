@@ -3,7 +3,7 @@ package objektwerks.cats
 import org.scalatest.{FunSuite, Matchers}
 
 class ValidatedTest extends FunSuite with Matchers {
-  test("validated") {
+  test("valid > invalid") {
     import cats.data.Validated._
     import cats.data.Validated.{Invalid, Valid}
     import cats.syntax.validated._
