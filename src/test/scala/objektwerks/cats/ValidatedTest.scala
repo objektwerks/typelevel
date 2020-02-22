@@ -13,12 +13,15 @@ sealed trait ProfileValidator {
   sealed trait ProfileValidation {
     def error: String
   }
+
   case object UserHasSpecialCharacters extends ProfileValidation {
     def error: String = "Special characters not allowed."
   }
+
   case object PasswordDoesNotMeetCriteria extends ProfileValidation {
     def error: String = "At least 10 characters, one uppercase letter, one lowercase letter, one number and one special character."
   }
+
   type ValidationResult[A] = ValidatedNec[ProfileValidation, A]
 
   private def validateUser(user: String): ValidationResult[String] =
@@ -32,7 +35,6 @@ sealed trait ProfileValidator {
     (validateUser(user), validatePassword(password)).mapN(Profile)
   }
 }
-
 
 class ValidatedTest extends FunSuite with Matchers with ProfileValidator {
   test("valid > invalid") {
