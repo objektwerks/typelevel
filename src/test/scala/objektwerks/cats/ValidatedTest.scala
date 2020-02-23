@@ -73,7 +73,7 @@ class ValidatedTest extends FunSuite with Matchers {
     val profile = Profile("", "")
     val validatedProfile = validateProfile(profile.user, profile.password)
     validatedProfile.isInvalid shouldBe true
-    validatedProfile.toEither.left.toSeq.head.length shouldBe 2
+    validatedProfile.toEither.left.toOption.get.length shouldBe 2
     validatedProfile.toEither match {
       case Right(_) => fail()
       case Left(invalids) => invalids.map {
