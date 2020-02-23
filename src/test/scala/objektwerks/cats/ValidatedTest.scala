@@ -9,34 +9,31 @@ import scala.util.Try
 
 case class Profile(user: String, password: String)
 
-sealed trait ProfileValidator {
-  sealed trait ProfileInvalid {
-    def error: String
-  }
+object ProfileValidator {
+  val userRegex = "^[a-zA-Z0-9]+$"
+  val userError = "Special characters forbidden."
+  val passwordRegex = "(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$"
+  val passwordError = "10+ chars, 1 uppercase char, 1 lowercase char, 1 number, 1 special char."
 
-  case object UserInvalid extends ProfileInvalid {
-    def error: String = "Special characters not allowed."
-  }
-
-  case object PasswordInvalid extends ProfileInvalid {
-    def error: String = "At least 10 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character."
-  }
+  sealed trait ProfileInvalid { def error: String }
+  case object UserInvalid extends ProfileInvalid { def error: String = userError }
+  case object PasswordInvalid extends ProfileInvalid { def error: String = passwordError }
 
   type ValidationResult[A] = ValidatedNec[ProfileInvalid, A]
 
+  def validateProfile(user: String, password: String): ValidationResult[Profile] =
+    (validateUser(user), validatePassword(password)).mapN(Profile)
+
   private def validateUser(user: String): ValidationResult[String] =
-    if (user.matches("^[a-zA-Z0-9]+$")) user.validNec else UserInvalid.invalidNec
+    if (user.matches(userRegex)) user.validNec
+    else UserInvalid.invalidNec
 
   private def validatePassword(password: String): ValidationResult[String] =
-    if (password.matches("(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$")) password.validNec
+    if (password.matches(passwordRegex)) password.validNec
     else PasswordInvalid.invalidNec
-
-  def validateProfile(user: String, password: String): ValidationResult[Profile] = {
-    (validateUser(user), validatePassword(password)).mapN(Profile)
-  }
 }
 
-class ValidatedTest extends FunSuite with Matchers with ProfileValidator {
+class ValidatedTest extends FunSuite with Matchers {
   test("valid") {
     valid[String, Int](3) shouldBe Valid(3)
     3.valid.map(_ * 3) shouldBe Valid(9)
@@ -59,22 +56,30 @@ class ValidatedTest extends FunSuite with Matchers with ProfileValidator {
   }
 
   test("validator valid") {
+    import objektwerks.cats.ProfileValidator._
+
     val profile = Profile("typelevel", "@Typelevel_Validated_2.1.0")
     val validatedProfile = validateProfile(profile.user, profile.password)
     validatedProfile.isValid shouldBe true
     validatedProfile.toEither match {
-      case Right(value) => value shouldEqual profile
+      case Right(value) => value shouldEqual profile; println(value)
       case Left(_) => fail()
     }
   }
 
   test("validator invalid") {
+    import objektwerks.cats.ProfileValidator._
+
     val profile = Profile("", "")
     val validatedProfile = validateProfile(profile.user, profile.password)
     validatedProfile.isInvalid shouldBe true
+    validatedProfile.toEither.left.toSeq.head.length shouldBe 2
     validatedProfile.toEither match {
       case Right(_) => fail()
-      case Left(invalids) => invalids.map(invalid => invalid shouldBe a[ProfileInvalid])
+      case Left(invalids) => invalids.map {
+        case ui @ UserInvalid => ui.error shouldEqual UserInvalid.error; println(ui.error)
+        case pi @ PasswordInvalid => pi.error shouldEqual PasswordInvalid.error; println(pi.error)
+      }
     }
   }
 }
