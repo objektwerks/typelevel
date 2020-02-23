@@ -10,9 +10,9 @@ import scala.util.Try
 case class Profile(user: String, password: String)
 
 object ProfileValidator {
-  private val userRegex = "^[a-zA-Z0-9]+$"
+  private val userRegex = "^[a-zA-Z0-9]+$".r
   private val userError = "Special characters forbidden."
-  private val passwordRegex = "(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$"
+  private val passwordRegex = "(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$".r
   private val passwordError = "10+ chars, 1 uppercase char, 1 lowercase char, 1 number, 1 special char."
 
   sealed trait ProfileInvalid { def error: String }
@@ -25,11 +25,11 @@ object ProfileValidator {
     (validateUser(user), validatePassword(password)).mapN(Profile)
 
   private def validateUser(user: String): ValidationResult[String] =
-    if (user.matches(userRegex)) user.validNec
+    if (userRegex.matches(user)) user.validNec
     else UserInvalid.invalidNec
 
   private def validatePassword(password: String): ValidationResult[String] =
-    if (password.matches(passwordRegex)) password.validNec
+    if (passwordRegex.matches(password)) password.validNec
     else PasswordInvalid.invalidNec
 }
 
