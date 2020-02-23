@@ -15,22 +15,22 @@ object ProfileValidator {
   private val passwordRegex = "(?=^.{10,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$".r
   private val passwordError = "10+ chars, 1 uppercase char, 1 lowercase char, 1 number, 1 special char."
 
-  sealed trait ProfileInvalid { def error: String }
-  case object UserInvalid extends ProfileInvalid { def error: String = userError }
-  case object PasswordInvalid extends ProfileInvalid { def error: String = passwordError }
+  sealed trait InvalidProfile { def error: String }
+  case object InvalidUser extends InvalidProfile { def error: String = userError }
+  case object InvalidPassword extends InvalidProfile { def error: String = passwordError }
 
-  type ValidationResult[A] = ValidatedNec[ProfileInvalid, A]
+  type ValidationResult[A] = ValidatedNec[InvalidProfile, A]
 
   def validateProfile(user: String, password: String): ValidationResult[Profile] =
     (validateUser(user), validatePassword(password)).mapN(Profile)
 
   private def validateUser(user: String): ValidationResult[String] =
     if (userRegex.matches(user)) user.validNec
-    else UserInvalid.invalidNec
+    else InvalidUser.invalidNec
 
   private def validatePassword(password: String): ValidationResult[String] =
     if (passwordRegex.matches(password)) password.validNec
-    else PasswordInvalid.invalidNec
+    else InvalidPassword.invalidNec
 }
 
 class ValidatedTest extends FunSuite with Matchers {
@@ -77,8 +77,8 @@ class ValidatedTest extends FunSuite with Matchers {
     validatedProfile.toEither match {
       case Right(_) => fail()
       case Left(invalids) => invalids.map {
-        case ui @ UserInvalid => ui.error shouldEqual UserInvalid.error; println(ui.error)
-        case pi @ PasswordInvalid => pi.error shouldEqual PasswordInvalid.error; println(pi.error)
+        case ui @ InvalidUser => ui.error shouldEqual InvalidUser.error; println(ui.error)
+        case pi @ InvalidPassword => pi.error shouldEqual InvalidPassword.error; println(pi.error)
       }
     }
   }
