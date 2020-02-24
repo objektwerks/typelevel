@@ -2,7 +2,7 @@ package objektwerks.cats
 
 import org.scalatest.{FunSuite, Matchers}
 
-class MoniodTest extends FunSuite with Matchers {
+class MonoidTest extends FunSuite with Matchers {
   test("monoid") {
     import cats.Monoid
     import cats.instances.int._
