@@ -2,6 +2,7 @@
 .idea
 .metals
 target
+project/metals.sbt
 project/project
 project/target
 .DS_Store
