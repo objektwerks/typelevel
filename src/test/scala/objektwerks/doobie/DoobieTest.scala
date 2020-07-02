@@ -2,6 +2,7 @@ package objektwerks.doobie
 
 import cats.effect.{IO, _}
 import cats.implicits._
+
 import doobie._
 import doobie.implicits._
 import doobie.scalatest._

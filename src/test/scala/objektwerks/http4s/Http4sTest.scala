@@ -3,8 +3,10 @@ package objektwerks.http4s
 import java.time.LocalTime
 
 import cats.effect._
+
 import io.circe.generic.auto._
 import io.circe.syntax._
+
 import org.http4s._
 import org.http4s.circe._
 import org.http4s.client.blaze.BlazeClientBuilder
@@ -12,7 +14,6 @@ import org.http4s.dsl.io._
 import org.http4s.implicits._
 import org.http4s.server.Router
 import org.http4s.server.blaze.BlazeServerBuilder
-
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.funsuite.AnyFunSuite
 
