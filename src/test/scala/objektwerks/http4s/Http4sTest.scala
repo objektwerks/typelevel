@@ -44,7 +44,7 @@ class Http4sTest extends FunSuite with BeforeAndAfterAll {
   implicit val cs: ContextShift[IO] = IO.contextShift(global)
   implicit val timer: Timer[IO] = IO.timer(global)
 
-  val server = BlazeServerBuilder[IO]
+  val server = BlazeServerBuilder[IO](global)
     .bindHttp(7979, "localhost")
     .withHttpApp(Routes.routes)
     .resource.use(_ => IO.never)

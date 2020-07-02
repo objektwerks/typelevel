@@ -64,7 +64,7 @@ object Routes {
 
 object Http4sApp extends IOApp {
   def run(args: List[String]): IO[ExitCode] =
-    BlazeServerBuilder[IO]
+    BlazeServerBuilder[IO](ExecutionContext.global)
       .bindHttp(7777, "localhost")
       .withHttpApp(Routes.routes)
       .serve
