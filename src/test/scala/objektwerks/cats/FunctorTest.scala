@@ -1,8 +1,9 @@
 package objektwerks.cats
 
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class FunctorTest extends FunSuite with Matchers {
+class FunctorTest extends AnyFunSuite with Matchers {
   test("functor") {
     import cats.Functor
     import cats.instances.list._

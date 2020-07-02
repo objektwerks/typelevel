@@ -1,8 +1,9 @@
 package objektwerks.cats
 
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class SemigroupTest extends FunSuite with Matchers {
+class SemigroupTest extends AnyFunSuite with Matchers {
   test("semigroup") {
     import cats.Semigroup
     import cats.instances.int._

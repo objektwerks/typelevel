@@ -1,8 +1,9 @@
 package objektwerks.cats
 
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class MonadErrorTest extends FunSuite with Matchers {
+class MonadErrorTest extends AnyFunSuite with Matchers {
   test("monad error") {
     import cats.MonadError
     import cats.instances.either._

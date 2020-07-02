@@ -4,7 +4,7 @@ version := "0.1-SNAPSHOT"
 scalaVersion := "2.13.2"
 libraryDependencies ++= {
   val catsVersion = "2.1.1"
-  val doobieVersion = "0.8.8"
+  val doobieVersion = "0.9.0"
   val http4sVersion = "0.21.6"
   val circeVersion = "0.13.0"
   Seq(
@@ -21,6 +21,6 @@ libraryDependencies ++= {
     "org.http4s" %% "http4s-circe" % http4sVersion,
     "ch.qos.logback" % "logback-classic" % "1.2.3",
     "org.tpolecat" %% "doobie-scalatest" % doobieVersion % Test,
-    "org.scalatest" %% "scalatest" % "3.0.8" % Test
+    "org.scalatest" %% "scalatest" % "3.2.0" % Test
   )
 }

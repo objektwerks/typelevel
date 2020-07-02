@@ -1,8 +1,9 @@
 package objektwerks.cats
 
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class EitherTest extends FunSuite with Matchers {
+class EitherTest extends AnyFunSuite with Matchers {
   test("either") {
     import cats.syntax.either._
     import scala.util.Try

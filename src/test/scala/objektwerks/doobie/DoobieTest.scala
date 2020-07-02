@@ -6,7 +6,8 @@ import doobie._
 import doobie.implicits._
 import doobie.scalatest._
 import doobie.util.transactor.Transactor
-import org.scalatest.FunSuite
+
+import org.scalatest.funsuite.AnyFunSuite
 
 import scala.concurrent.ExecutionContext
 import scala.io.Source
@@ -14,7 +15,7 @@ import scala.io.Source
 case class Worker(id: Int = 0, name: String)
 case class Task(id: Int = 0, workerId: Int, task: String)
 
-class DoobieTest extends FunSuite with IOChecker {
+class DoobieTest extends AnyFunSuite with IOChecker {
   implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
   val xa = Transactor.fromDriverManager[IO]( "org.h2.Driver", "jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1", "sa", "sa" )
   val schema = Source.fromInputStream(getClass.getResourceAsStream("/schema.sql")).mkString

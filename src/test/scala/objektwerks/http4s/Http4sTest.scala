@@ -12,7 +12,9 @@ import org.http4s.dsl.io._
 import org.http4s.implicits._
 import org.http4s.server.Router
 import org.http4s.server.blaze.BlazeServerBuilder
-import org.scalatest.{BeforeAndAfterAll, FunSuite}
+
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.funsuite.AnyFunSuite
 
 case class Now(time: String = LocalTime.now.toString)
 object Now {
@@ -37,7 +39,7 @@ object Routes {
   val routes = Router("/now" -> nowRoute, "/message" -> messageRoute).orNotFound
 }
 
-class Http4sTest extends FunSuite with BeforeAndAfterAll {
+class Http4sTest extends AnyFunSuite with BeforeAndAfterAll {
   import Routes._
   import scala.concurrent.ExecutionContext.Implicits.global
 

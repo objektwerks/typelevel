@@ -1,11 +1,13 @@
 package objektwerks.cats.effect
 
 import cats.effect.{IO, Resource}
-import org.scalatest.{FunSuite, Matchers}
+
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
 import scala.io.Source
 
-class ResourceTest extends FunSuite with Matchers {
+class ResourceTest extends AnyFunSuite with Matchers {
   test("auto closeable") {
     val file = IO { Source.fromFile("build.sbt") }
     Resource

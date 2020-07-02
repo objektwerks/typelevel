@@ -1,8 +1,9 @@
 package objektwerks.cats
 
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class StateMonadTest extends FunSuite with Matchers {
+class StateMonadTest extends AnyFunSuite with Matchers {
   test("state monad") {
     import cats.data.State
 

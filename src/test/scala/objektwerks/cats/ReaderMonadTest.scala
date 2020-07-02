@@ -1,8 +1,9 @@
 package objektwerks.cats
 
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class ReaderMonadTest extends FunSuite with Matchers {
+class ReaderMonadTest extends AnyFunSuite with Matchers {
   test("reader monad") {
     import cats.data.Reader
 

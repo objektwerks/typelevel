@@ -3,7 +3,9 @@ package objektwerks.cats
 import cats.data.Validated.{Invalid, Valid, _}
 import cats.data.ValidatedNec
 import cats.implicits._
-import org.scalatest.{FunSuite, Matchers}
+
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
 import scala.util.Try
 
@@ -33,7 +35,7 @@ object ProfileValidator {
     else InvalidPassword.invalidNec
 }
 
-class ValidatedTest extends FunSuite with Matchers {
+class ValidatedTest extends AnyFunSuite with Matchers {
   test("valid") {
     valid[String, Int](3) shouldBe Valid(3)
     3.valid.map(_ * 3) shouldBe Valid(9)

@@ -1,6 +1,6 @@
 package objektwerks.cats
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 trait Printable[A] {
   def format(value: A): String
@@ -40,7 +40,7 @@ object Person {
   }
 }
 
-class PrintableTest extends FunSuite {
+class PrintableTest extends AnyFunSuite {
   test("instances") {
     val fred = Person(name = "fred", age = 33)
     assert(Printable.format(fred).nonEmpty)

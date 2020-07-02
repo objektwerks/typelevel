@@ -1,8 +1,9 @@
 package objektwerks.cats
 
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class TraverseTest extends FunSuite with Matchers {
+class TraverseTest extends AnyFunSuite with Matchers {
   test("traverse") {
     import cats.Traverse
     import cats.instances.future._
