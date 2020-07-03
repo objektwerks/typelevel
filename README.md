@@ -1,6 +1,6 @@
 Typelevel
 ---------
->The purpose of this project is to prototype and test features of Typelevel projects.
+>The purpose of this project is to test Typelevel project features.
 
 Test
 ----
