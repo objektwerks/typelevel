@@ -15,6 +15,7 @@ import org.http4s.server.Router
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.funsuite.AnyFunSuite
+import org.http4s.client.blaze.BlazeClientBuilder
 
 case class Now(time: String = LocalTime.now.toString)
 object Now {
@@ -42,8 +43,8 @@ object Routes {
 object HttpApp {
   import scala.concurrent.ExecutionContext.Implicits.global
 
-  private implicit val cs: ContextShift[IO] = IO.contextShift(global)
-  private implicit val timer: Timer[IO] = IO.timer(global)
+  implicit val cs: ContextShift[IO] = IO.contextShift(global)
+  implicit val timer: Timer[IO] = IO.timer(global)
 
   lazy val server = BlazeServerBuilder[IO](global)
     .bindHttp(7979, "localhost")
@@ -54,27 +55,45 @@ object HttpApp {
 }
 
 class Http4sTest extends AnyFunSuite with BeforeAndAfterAll {
+  import scala.concurrent.ExecutionContext.Implicits.global
+  import HttpApp._
   import Routes._
-
-  val server = HttpApp.server
 
   override protected def afterAll(): Unit = {
     server.cancel.unsafeRunSync()
   }
 
-  test("get") {
+  test("client-server get") {
+    val get = Request[IO](Method.GET, Uri.uri("http://localhost:7979/now"))
+    BlazeClientBuilder[IO](global).resource.use { client =>
+      val now = client.expect[Now](get).unsafeRunSync()
+      assert(now.time.nonEmpty)
+      IO.unit
+    }
+  }
+
+  test("client-server post") {
+    val post = Request[IO](Method.POST, Uri.uri("http://localhost:7979/message")).withEntity(Message("Prost!").asJson)
+    BlazeClientBuilder[IO](global).resource.use { client =>
+      val message = client.expect[Message](post).unsafeRunSync
+      assert(message.text.nonEmpty)
+      IO.unit
+    }
+  }
+
+  test("serverless get") {
     val get = Request[IO](Method.GET, Uri.uri("/now"))
     val io = nowRoute.orNotFound.run(get)
     val now = io.unsafeRunSync().as[Now].unsafeRunSync
     assert(now.time.nonEmpty)
-    println(s"now time: ${now.time}")
+    println(s"serverless get now time: ${now.time}")
   }
 
-  test("post") {
+  test("serverless post") {
     val post = Request[IO](Method.POST, Uri.uri("/message")).withEntity(Message("Prost!").asJson)
     val io = messageRoute.orNotFound.run(post)
     val message = io.unsafeRunSync().as[Message].unsafeRunSync
     assert(message.text.nonEmpty)
-    println(s"message text: ${message.text}")
+    println(s"serverless post message text: ${message.text}")
   }
 }
