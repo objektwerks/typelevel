@@ -16,6 +16,7 @@ import org.http4s.server.blaze.BlazeServerBuilder
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.funsuite.AnyFunSuite
 import org.http4s.client.blaze.BlazeClientBuilder
+import org.scalatest.matchers.should.Matchers
 
 case class Now(time: String = LocalTime.now.toString)
 object Now {
@@ -54,7 +55,7 @@ object HttpApp {
     .unsafeRunSync()
 }
 
-class Http4sTest extends AnyFunSuite with BeforeAndAfterAll {
+class Http4sTest extends AnyFunSuite with BeforeAndAfterAll with Matchers {
   import scala.concurrent.ExecutionContext.Implicits.global
   import HttpApp._
   import Routes._
@@ -67,7 +68,7 @@ class Http4sTest extends AnyFunSuite with BeforeAndAfterAll {
     val get = Request[IO](Method.GET, Uri.uri("http://localhost:7979/now"))
     BlazeClientBuilder[IO](global).resource.use { client =>
       val now = client.expect[Now](get).unsafeRunSync()
-      assert(now.time.nonEmpty)
+      LocalTime.parse(now.time).isInstanceOf[LocalTime] shouldBe true
       IO.unit
     }
   }
@@ -76,7 +77,7 @@ class Http4sTest extends AnyFunSuite with BeforeAndAfterAll {
     val post = Request[IO](Method.POST, Uri.uri("http://localhost:7979/message")).withEntity(Message("Prost!").asJson)
     BlazeClientBuilder[IO](global).resource.use { client =>
       val message = client.expect[Message](post).unsafeRunSync
-      assert(message.text.nonEmpty)
+      message.text shouldEqual "client: Prost!  server: Cheers!"
       IO.unit
     }
   }
@@ -85,15 +86,13 @@ class Http4sTest extends AnyFunSuite with BeforeAndAfterAll {
     val get = Request[IO](Method.GET, Uri.uri("/now"))
     val io = nowRoute.orNotFound.run(get)
     val now = io.unsafeRunSync().as[Now].unsafeRunSync
-    assert(now.time.nonEmpty)
-    println(s"serverless get now time: ${now.time}")
+    LocalTime.parse(now.time).isInstanceOf[LocalTime] shouldBe true
   }
 
   test("serverless post") {
     val post = Request[IO](Method.POST, Uri.uri("/message")).withEntity(Message("Prost!").asJson)
     val io = messageRoute.orNotFound.run(post)
     val message = io.unsafeRunSync().as[Message].unsafeRunSync
-    assert(message.text.nonEmpty)
-    println(s"serverless post message text: ${message.text}")
+    message.text shouldEqual "client: Prost!  server: Cheers!"
   }
 }
