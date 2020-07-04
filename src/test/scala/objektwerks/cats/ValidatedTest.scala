@@ -64,7 +64,7 @@ class ValidatedTest extends AnyFunSuite with Matchers {
     val validatedProfile = validateProfile(profile.user, profile.password)
     validatedProfile.isValid shouldBe true
     validatedProfile.toEither match {
-      case Right(value) => value shouldEqual profile; println(value)
+      case Right(value) => value shouldEqual profile
       case Left(_) => fail()
     }
   }
@@ -79,8 +79,8 @@ class ValidatedTest extends AnyFunSuite with Matchers {
     validatedProfile.toEither match {
       case Right(_) => fail()
       case Left(invalids) => invalids.map {
-        case ui @ InvalidUser => ui.error shouldEqual InvalidUser.error; println(ui.error)
-        case pi @ InvalidPassword => pi.error shouldEqual InvalidPassword.error; println(pi.error)
+        case ui @ InvalidUser => ui.error shouldEqual InvalidUser.error
+        case pi @ InvalidPassword => pi.error shouldEqual InvalidPassword.error
       }
     }
   }
