@@ -76,7 +76,7 @@ class Http4sTest extends AnyFunSuite with BeforeAndAfterAll with Matchers {
   test("client-server post") {
     val post = Request[IO](Method.POST, Uri.uri("http://localhost:7979/message")).withEntity(Message("Prost!").asJson)
     BlazeClientBuilder[IO](global).resource.use { client =>
-      val message = client.expect[Message](post).unsafeRunSync
+      val message = client.expect[Message](post).unsafeRunSync()
       message.text shouldEqual "client: Prost!  server: Cheers!"
       IO.unit
     }
@@ -85,14 +85,14 @@ class Http4sTest extends AnyFunSuite with BeforeAndAfterAll with Matchers {
   test("serverless get") {
     val get = Request[IO](Method.GET, Uri.uri("/now"))
     val io = nowRoute.orNotFound.run(get)
-    val now = io.unsafeRunSync().as[Now].unsafeRunSync
+    val now = io.unsafeRunSync().as[Now].unsafeRunSync()
     LocalTime.parse(now.time).isInstanceOf[LocalTime] shouldBe true
   }
 
   test("serverless post") {
     val post = Request[IO](Method.POST, Uri.uri("/message")).withEntity(Message("Prost!").asJson)
     val io = messageRoute.orNotFound.run(post)
-    val message = io.unsafeRunSync().as[Message].unsafeRunSync
+    val message = io.unsafeRunSync().as[Message].unsafeRunSync()
     message.text shouldEqual "client: Prost!  server: Cheers!"
   }
 }

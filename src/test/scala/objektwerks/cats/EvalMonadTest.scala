@@ -7,9 +7,9 @@ class EvalMonadTest extends AnyFunSuite with Matchers {
   test("eval monad") {
     import cats.Eval
 
-    val nowEagerMemoized = Eval.now(math.random)
-    val laterLazyMemoized = Eval.later(math.random)
-    val alwaysCalculated = Eval.always(math.random)
+    val nowEagerMemoized = Eval.now(math.random())
+    val laterLazyMemoized = Eval.later(math.random())
+    val alwaysCalculated = Eval.always(math.random())
 
     nowEagerMemoized.value shouldEqual nowEagerMemoized.value
     laterLazyMemoized.value shouldEqual laterLazyMemoized.value

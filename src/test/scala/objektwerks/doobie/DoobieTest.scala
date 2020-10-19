@@ -69,29 +69,29 @@ class DoobieTest extends AnyFunSuite with IOChecker {
     .update
     .run
     .transact(xa)
-    .unsafeRunSync
+    .unsafeRunSync()
 
   def insert: (Int, Int, Int, Int) = {
     val barneyId = insertWorker
       .toUpdate0("barney")
       .withUniqueGeneratedKeys[Int]("id")
       .transact(xa)
-      .unsafeRunSync
+      .unsafeRunSync()
     val fredId =insertWorker
       .toUpdate0("fred")
       .withUniqueGeneratedKeys[Int]("id")
       .transact(xa)
-      .unsafeRunSync
+      .unsafeRunSync()
     val barneyTaskId = insertTask
       .toUpdate0((barneyId, "clean pool"))
       .withUniqueGeneratedKeys[Int]("id")
       .transact(xa)
-      .unsafeRunSync
+      .unsafeRunSync()
     val fredTaskId = insertTask
       .toUpdate0((fredId, "clean car"))
       .withUniqueGeneratedKeys[Int]("id")
       .transact(xa)
-      .unsafeRunSync
+      .unsafeRunSync()
     (barneyId, fredId, barneyTaskId, fredTaskId)
   }
 
@@ -99,22 +99,22 @@ class DoobieTest extends AnyFunSuite with IOChecker {
     .toUpdate0(("barney rebel", "barney"))
     .run *> updateWorker.toUpdate0(("fred flintstone", "fred")).run)
     .transact(xa)
-    .unsafeRunSync
+    .unsafeRunSync()
 
   def select: Int = {
     val workers = selectWorkers
       .to[List]
       .transact(xa)
-      .unsafeRunSync
+      .unsafeRunSync()
     val tasks = selectTasks
       .to[List]
       .transact(xa)
-      .unsafeRunSync
+      .unsafeRunSync()
     workers.length + tasks.length
   }
 
   def delete: Int = (deleteTasks
     .run *> deleteWorkers.run)
     .transact(xa)
-    .unsafeRunSync
+    .unsafeRunSync()
 }
