@@ -16,6 +16,7 @@ import org.http4s.dsl.io._
 import org.http4s.implicits._
 import org.http4s.server.Router
 import org.http4s.server.blaze._
+import org.http4s.Status.Successful
 
 import scala.concurrent.ExecutionContext
 
@@ -30,7 +31,7 @@ object Headers {
 
   def addHeader(route: HttpRoutes[IO], header: Header): HttpRoutes[IO] = Kleisli { request: Request[IO] =>
     route(request).map {
-      case Status.Successful(response) => response.putHeaders(header)
+      case Successful(response) => response.putHeaders(header)
       case response => response
     }
   }
@@ -39,24 +40,29 @@ object Headers {
 object Routes {
   import Headers._
 
-  private val blockingEc = Blocker.liftExecutionContext(ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(1)))
-  private implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
+  val blockingExecutionContext = Blocker
+    .liftExecutionContext(
+      ExecutionContext.fromExecutorService(
+        Executors.newFixedThreadPool(1)
+      ) 
+    )
+  implicit val contextShift: ContextShift[IO] = IO.contextShift( ExecutionContext.global )
 
-  private val indexRoute = HttpRoutes.of[IO] {
-    case request @ GET -> Root => StaticFile.fromResource("/index.html", blockingEc, Some(request))
-      .getOrElseF(NotFound())
+  val indexRoute = HttpRoutes.of[IO] {
+    case request @ GET -> Root => StaticFile.fromResource("/index.html", blockingExecutionContext, Some(request))
+                                            .getOrElseF( NotFound() )
   }
-  private val indexRouteWithNoCacheHeader = addHeader(indexRoute, noCacheHeader)
+  val indexRouteWithNoCacheHeader = addHeader(indexRoute, noCacheHeader)
 
-  private val resourceRoute = HttpRoutes.of[IO] {
+  val resourceRoute = HttpRoutes.of[IO] {
     case request @ GET -> Root / path if List(".ico", ".css", ".js")
-      .exists(path.endsWith) => StaticFile.fromResource("/" + path, blockingEc, Some(request))
-      .getOrElseF(NotFound())
+      .exists(path.endsWith) => StaticFile.fromResource("/" + path, blockingExecutionContext, Some(request))
+      .getOrElseF( NotFound() )
   }
-  private val resourceRouteWithNoCacheHeader = addHeader(resourceRoute, noCacheHeader)
+  val resourceRouteWithNoCacheHeader = addHeader(resourceRoute, noCacheHeader)
 
-  private val nowRoute = HttpRoutes.of[IO] {
-    case GET -> Root / "now" => Ok(Now().asJson)
+  val nowRoute = HttpRoutes.of[IO] {
+    case GET -> Root / "now" => Ok( Now().asJson )
   }
 
   val routes = Router("" -> indexRouteWithNoCacheHeader,
@@ -66,11 +72,11 @@ object Routes {
 
 object Http4sApp extends IOApp {
   def run(args: List[String]): IO[ExitCode] =
-    BlazeServerBuilder[IO](ExecutionContext.global)
+    BlazeServerBuilder[IO]( executionContext )
       .bindHttp(7777, "localhost")
-      .withHttpApp(Routes.routes)
+      .withHttpApp( Routes.routes )
       .serve
       .compile
       .drain
-      .as(ExitCode.Success)
+      .as( ExitCode.Success )
 }
