@@ -1,6 +1,9 @@
 Typelevel
 ---------
->The purpose of this project is to test Typelevel project features.
+>Typelevel project feature tests for:
+1. Cats
+2. Doobie
+3. Http4s
 
 Test
 ----
