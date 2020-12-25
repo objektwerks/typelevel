@@ -2,7 +2,7 @@
 <configuration>
     <timestamp key="timeStamp" datePattern="yyyyMMdd'T'HHmm"/>
     <appender name="file" class="ch.qos.logback.core.FileAppender">
-        <file>./target/http4s.app.log.${timeStamp}.txt</file>
+        <file>./target/http4s.app.${timeStamp}.log</file>
         <append>true</append>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
