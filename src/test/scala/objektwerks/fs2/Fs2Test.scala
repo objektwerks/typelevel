@@ -25,7 +25,7 @@ class Fs2Test extends AnyFunSuite with Matchers {
   }
 
   test("eval") {
-    val effect = Stream.eval( IO { println("adding 1 + 2 + 3 ..."); 1 + 2 + 3 } )
-    effect.compile.toList.unsafeRunSync() shouldBe List(6)
+    Stream.eval( IO { 1 + 2 + 3 } ).compile.toList.unsafeRunSync() shouldBe List(6)
+    Stream.eval( IO { 1 + 2 + 3 } ).compile.fold(0)(_ + _).unsafeRunSync() shouldBe 6
   }
 }
