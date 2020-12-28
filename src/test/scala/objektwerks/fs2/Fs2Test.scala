@@ -1,5 +1,7 @@
 package objektwerks.fs2
 
+import cats.effect.IO
+
 import fs2.Stream
 
 import org.scalatest.funsuite.AnyFunSuite
@@ -17,5 +19,10 @@ class Fs2Test extends AnyFunSuite with Matchers {
     Stream(1, 2, 3).fold(0)(_ + _).toList shouldBe List(6)
     Stream(1, 2, 3).map(_ + 1).toList shouldBe List(2, 3, 4)
     Stream(1, 2, 3).flatMap(i => Stream(i, i)).toList
+  }
+
+  test("eval") {
+    val effect = Stream.eval( IO { println("adding 1 + 2 + 3 ..."); 1 + 2 + 3 } )
+    effect.compile.toList.unsafeRunSync() shouldBe List(6)
   }
 }
