@@ -27,5 +27,6 @@ class Fs2Test extends AnyFunSuite with Matchers {
   test("eval") {
     Stream.eval( IO { 1 + 2 + 3 } ).compile.toList.unsafeRunSync() shouldBe List(6)
     Stream.eval( IO { 1 + 2 + 3 } ).compile.fold(0)(_ + _).unsafeRunSync() shouldBe 6
+    ( Stream(1, 2) ++ Stream.eval( IO.pure(3) ) ).compile.toList.unsafeRunSync() shouldBe List(1, 2, 3)
   }
 }
