@@ -1,7 +1,9 @@
 package objektwerks.app
 
 import cats.effect.{Blocker, ExitCode, IO, IOApp}
+
 import fs2.{io, text, Stream}
+
 import java.nio.file.Paths
 
 object Fs2App extends IOApp {
