@@ -40,12 +40,7 @@ object Headers {
 object Routes {
   import Headers._
 
-  val blockingExecutionContext = Blocker
-    .liftExecutionContext(
-      ExecutionContext.fromExecutorService(
-        Executors.newFixedThreadPool(1)
-      ) 
-    )
+  val blockingExecutionContext = Blocker.liftExecutionContext( ExecutionContext.fromExecutorService( Executors.newFixedThreadPool(1) ) )
   implicit val contextShift: ContextShift[IO] = IO.contextShift( ExecutionContext.global )
 
   val indexRoute = HttpRoutes.of[IO] {
