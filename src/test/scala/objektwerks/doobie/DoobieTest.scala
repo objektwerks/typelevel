@@ -9,6 +9,7 @@ import doobie.scalatest._
 import doobie.util.transactor.Transactor
 
 import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
 import scala.concurrent.ExecutionContext
 import scala.io.Source
@@ -16,7 +17,7 @@ import scala.io.Source
 case class Worker(id: Int = 0, name: String)
 case class Task(id: Int = 0, workerId: Int, task: String)
 
-class DoobieTest extends AnyFunSuite with IOChecker {
+class DoobieTest extends AnyFunSuite with Matchers with IOChecker {
   implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
   val xa = Transactor.fromDriverManager[IO]( "org.h2.Driver", "jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1", "sa", "sa" )
   val schema = Source.fromInputStream(getClass.getResourceAsStream("/schema.sql")).mkString
@@ -35,23 +36,23 @@ class DoobieTest extends AnyFunSuite with IOChecker {
   override def transactor: Transactor[IO] = xa
 
   test("ddl") {
-    assert(ddl(schema) == 0)
+    ddl(schema) shouldBe 0
   }
 
   test("insert") {
-    assert((1, 2, 1, 2) == insert)
+    (1, 2, 1, 2) shouldBe insert
   }
 
   test("update") {
-    assert(update == 1)
+    update shouldBe 1
   }
 
   test("select") {
-    assert(select == 4)
+    select shouldBe 4
   }
 
   test("delete") {
-    assert(delete == 2)
+    delete shouldBe 2
   }
 
   test("check") {
