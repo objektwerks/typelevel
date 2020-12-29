@@ -47,6 +47,6 @@ class Fs2Test extends AnyFunSuite with Matchers {
 
   test("concurrency") {
     implicit val contextShift = IO.contextShift(scala.concurrent.ExecutionContext.Implicits.global)
-    Stream(2, 3).merge( Stream.eval( IO { 1 } ) ).compile.toList.unsafeRunSync() shouldBe List(1, 2, 3)
+    Stream(1, 2).merge( Stream.eval( IO { 3 } ) ).compile.toList.unsafeRunSync().sorted shouldBe List(1, 2, 3)
   }
 }
