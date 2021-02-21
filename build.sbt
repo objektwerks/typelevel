@@ -21,6 +21,6 @@ libraryDependencies ++= {
     "org.http4s" %% "http4s-circe" % http4sVersion,
     "ch.qos.logback" % "logback-classic" % "1.2.3",
     "org.tpolecat" %% "doobie-scalatest" % doobieVersion % Test,
-    "org.scalatest" %% "scalatest" % "3.2.4" % Test
+    "org.scalatest" %% "scalatest" % "3.2.5" % Test
   )
 }
