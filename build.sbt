@@ -1,7 +1,7 @@
 name := "typelevel"
 organization := "objektwerks"
 version := "0.1-SNAPSHOT"
-scalaVersion := "2.13.4"
+scalaVersion := "2.13.5"
 libraryDependencies ++= {
   val catsVersion = "2.3.1"
   val doobieVersion = "0.10.0"
