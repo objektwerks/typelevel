@@ -11,16 +11,7 @@ case class Street(name: String, city: City)
 case class City(name: String, state: State)
 case class State(name: String)
 
-object ResidentLens {
-  val residentLens: Lens[Resident, Street] = GenLens[Resident](_.street)
-  val streetLens: Lens[Street, City] = GenLens[Street](_.city)
-  val cityLens: Lens[City, State] = GenLens[City](_.state)
-  val stateLens: Lens[State, String] = GenLens[State](_.name)
-}
-
 class MonocleTest extends AnyFunSuite with Matchers {
-  import ResidentLens._
-
   val resident = Resident("fred flintstone", Street("1 rock st", City("boulder", State("co"))))
 
   test("copy") {
@@ -31,6 +22,10 @@ class MonocleTest extends AnyFunSuite with Matchers {
   }
   
   test("lens") {
+    val residentLens: Lens[Resident, Street] = GenLens[Resident](_.street)
+    val streetLens: Lens[Street, City] = GenLens[Street](_.city)
+    val cityLens: Lens[City, State] = GenLens[City](_.state)
+
     GenLens[Resident](_.name).set("barney rebel")(resident) shouldBe
     Resident("barney rebel", Street("1 rock st", City("boulder", State("co"))))
 
