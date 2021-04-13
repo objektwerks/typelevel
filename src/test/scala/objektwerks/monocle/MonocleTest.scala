@@ -24,9 +24,8 @@ class MonocleTest extends AnyFunSuite with Matchers {
   val resident = Resident("fred flintstone", Street("1 rock st", City("boulder", State("co"))))
 
   test("copy") {
-    val state = resident.street.city.state
-    val newState = resident.street.city.state.copy(name = "colorado")
-    ( state != newState ) shouldBe true
+    ( resident.street.city !=resident.street.city.copy(name = "denver") ) shouldBe true
+    ( resident.street.city.state != resident.street.city.state.copy(name = "colorado") ) shouldBe true
   }
   
   test("lens") {
