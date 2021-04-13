@@ -3,8 +3,10 @@ Typelevel
 >Typelevel project feature tests for:
 1. Cats
 2. Doobie
-3. Http4s
-4. Refined
+3. FS2
+4. Http4s
+5. Monocle
+6. Refined
 
 Test
 ----
