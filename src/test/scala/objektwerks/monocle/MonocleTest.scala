@@ -30,6 +30,9 @@ class MonocleTest extends AnyFunSuite with Matchers {
   }
   
   test("lens") {
+    residentLens.set( Street("3 stoney dr", City("denver", State("co"))) )(resident) shouldBe
+    Resident("fred flintstone", Street("3 stoney dr", City("denver", State("co"))))
+
     ( residentLens.composeLens(streetLens) ).set( City("denver", State("co")) )(resident) shouldBe
     Resident("fred flintstone", Street("1 rock st", City("denver", State("co"))))
 
