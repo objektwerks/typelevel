@@ -4,6 +4,7 @@ Typelevel
 1. Cats
 2. Doobie
 3. Http4s
+4. Refined
 
 Test
 ----
