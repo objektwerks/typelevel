@@ -6,10 +6,16 @@ import monocle.macros.GenLens
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-case class Resident(name: String, street: Street)
-case class Street(name: String, city: City)
-case class City(name: String, state: State)
-case class State(name: String)
+object Name {
+  type Name = String
+}
+
+import Name._
+
+case class Resident(name: Name, street: Street)
+case class Street(name: Name, city: City)
+case class City(name: Name, state: State)
+case class State(name: Name)
 
 object ResidentLens {
   val residentLens: Lens[Resident, Street] = GenLens[Resident](_.street)
@@ -35,8 +41,6 @@ class MonocleTest extends AnyFunSuite with Matchers {
   }
 
   test("prisms") {
-  }
 
-  test("optics") {
   }
 }
