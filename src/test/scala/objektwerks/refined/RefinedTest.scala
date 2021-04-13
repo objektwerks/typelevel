@@ -20,7 +20,7 @@ case class Person(name: Name)
 
 class RefinedTest extends AnyFunSuite with Matchers {
   test("case class") {
-    val person = Person("jjj")
+    val person = Person("Sam")
     ( person.name.value.nonEmpty && person.name.value.size >= 3 ) shouldBe true
   }
 
