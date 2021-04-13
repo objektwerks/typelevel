@@ -6,4 +6,10 @@ import org.scalatest.matchers.should.Matchers
 class MonocleTest extends AnyFunSuite with Matchers {
   test("lens") {
   }
+
+  test("prisms") {
+  }
+
+  test("optics") {
+  }
 }
