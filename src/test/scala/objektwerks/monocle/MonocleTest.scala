@@ -15,9 +15,12 @@ object ResidentLens {
   val residentLens: Lens[Resident, Street] = GenLens[Resident](_.street)
   val streetLens: Lens[Street, City] = GenLens[Street](_.city)
   val cityLens: Lens[City, State] = GenLens[City](_.state)
+  val residentCompositeLens = residentLens.composeLens(streetLens).composeLens(cityLens)
 }
 
 class MonocleTest extends AnyFunSuite with Matchers {
+  import ResidentLens._
+
   val resident = Resident("fred flintstone", Street("1 rock st", City("boulder", State("co"))))
 
   test("copy") {
@@ -27,6 +30,8 @@ class MonocleTest extends AnyFunSuite with Matchers {
   }
   
   test("lens") {
+    val newResident = residentCompositeLens.set( State("colorado") )(resident)
+    newResident shouldBe Resident("fred flintstone", Street("1 rock st", City("boulder", State("colorado"))))
   }
 
   test("prisms") {
