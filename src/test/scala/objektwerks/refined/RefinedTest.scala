@@ -11,7 +11,19 @@ import eu.timepit.refined.string._
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
+object Person {
+  type Name = String Refined ( NonEmpty And MinSize[3] )
+}
+
+import Person._
+case class Person(name: Name)
+
 class RefinedTest extends AnyFunSuite with Matchers {
+  test("case class") {
+    val person = Person("jjj")
+    ( person.name.value.nonEmpty && person.name.value.size >= 3 ) shouldBe true
+  }
+
   test("boolean") {
     val isTrue: Boolean Refined True = true
     isTrue.value shouldBe true
