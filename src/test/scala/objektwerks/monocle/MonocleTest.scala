@@ -30,6 +30,9 @@ class MonocleTest extends AnyFunSuite with Matchers {
   }
   
   test("lens") {
+    GenLens[Resident](_.name).set("barney rebel")(resident) shouldBe
+    Resident("barney rebel", Street("1 rock st", City("boulder", State("co"))))
+
     residentLens.set( Street("3 stoney dr", City("denver", State("co"))) )(resident) shouldBe
     Resident("fred flintstone", Street("3 stoney dr", City("denver", State("co"))))
 
