@@ -26,4 +26,11 @@ class ShapelessTest extends AnyFunSuite with Matchers {
     red.select[Red.type] shouldBe Some(Red)
     yellow.select[Yellow.type] shouldBe Some(Yellow)
   }
+
+  test("conversion") {
+    case class User(name: String, age: Int)
+    val user = User("fred flintsonte", 27)
+    val userHList = Generic[User].to(user)
+    userHList shouldBe user.name :: user.age :: HNil
+  }
 }
