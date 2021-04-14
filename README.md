@@ -7,6 +7,7 @@ Typelevel
 4. Http4s
 5. Monocle
 6. Refined
+7. Shapeless
 
 Test
 ----
