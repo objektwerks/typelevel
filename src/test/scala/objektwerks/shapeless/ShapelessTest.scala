@@ -7,8 +7,8 @@ import shapeless.HNil
 
 class ShapelessTest extends AnyFunSuite with Matchers {
   test("hlist") {
-    val hlist = List(3) :: List("3") :: HNil
-    hlist.head shouldBe List(3)
-    hlist.tail shouldBe List("3") :: HNil
+    val hlist = 3 :: "3" :: HNil
+    hlist.head shouldBe 3
+    hlist.tail shouldBe "3" :: HNil
   }
 }
