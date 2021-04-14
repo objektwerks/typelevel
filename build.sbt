@@ -4,15 +4,17 @@ version := "0.1-SNAPSHOT"
 scalaVersion := "2.13.5"
 libraryDependencies ++= {
   val catsVersion = "2.5.0"
+  val catsEffectVersion = "2.4.1"
   val doobieVersion = "0.12.1"
   val http4sVersion = "0.21.22"
   val circeVersion = "0.13.0"
   val monocleVersion = "2.1.0"
   val refinedVersion = "0.9.23"
+  val shapelessVersion = "2.3.4"
   Seq(
     "org.typelevel" %% "cats-core" % catsVersion,
     "org.typelevel" %% "cats-free" % catsVersion,
-    "org.typelevel" %% "cats-effect" % "2.4.1",
+    "org.typelevel" %% "cats-effect" % catsEffectVersion,
     "io.circe" %% "circe-core" % circeVersion,
     "io.circe" %% "circe-generic" % circeVersion,
     "org.tpolecat" %% "doobie-core" % doobieVersion,
@@ -24,6 +26,7 @@ libraryDependencies ++= {
     "com.github.julien-truffaut" %% "monocle-core"  % monocleVersion,
     "com.github.julien-truffaut" %% "monocle-macro" % monocleVersion,
     "eu.timepit" %% "refined" % refinedVersion,
+    "com.chuusai" %% "shapeless" % shapelessVersion,
     "ch.qos.logback" % "logback-classic" % "1.2.3",
     "org.tpolecat" %% "doobie-scalatest" % doobieVersion % Test,
     "org.scalatest" %% "scalatest" % "3.2.7" % Test
