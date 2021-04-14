@@ -36,4 +36,15 @@ class ShapelessTest extends AnyFunSuite with Matchers {
 
     userHList shouldBe user.name :: user.age :: HNil
   }
+
+  test("polymorphic") {
+    object polyLength extends Poly1 {
+      implicit val listCase = at[List[Int]](i => i.length)
+      implicit val stringCase = at[String](s => s.length)
+    }
+    
+    polyLength.apply(List(1, 2)) shouldBe 2
+    polyLength.apply("123") shouldBe 3
+    List("1", "23", "456").map(polyLength) shouldBe List(1, 2, 3)
+  }
 }
