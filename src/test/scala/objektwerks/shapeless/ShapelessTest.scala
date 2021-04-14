@@ -8,6 +8,7 @@ import shapeless._
 class ShapelessTest extends AnyFunSuite with Matchers {
   test("hlist") {
     val hlist = 3 :: "3" :: HNil
+
     hlist.head shouldBe 3
     hlist.tail shouldBe "3" :: HNil
   }
@@ -29,8 +30,10 @@ class ShapelessTest extends AnyFunSuite with Matchers {
 
   test("conversion") {
     case class User(name: String, age: Int)
-    val user = User("fred flintsonte", 27)
+
+    val user = User("fred flintstone", 27)
     val userHList = Generic[User].to(user)
+
     userHList shouldBe user.name :: user.age :: HNil
   }
 }
