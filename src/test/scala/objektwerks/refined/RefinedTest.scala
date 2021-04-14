@@ -12,7 +12,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
 object Person {
-  type Name = String Refined ( NonEmpty And MinSize[3] )
+  type Name = String Refined ( NonEmpty And MinSize[6] )
 }
 
 import Person._
@@ -20,8 +20,8 @@ case class Person(name: Name)
 
 class RefinedTest extends AnyFunSuite with Matchers {
   test("case class") {
-    val person = Person("Sam")
-    ( person.name.value.nonEmpty && person.name.value.size >= 3 ) shouldBe true
+    val person = Person("Fred Flintstone")
+    ( person.name.value.nonEmpty && person.name.value.size >= 6 ) shouldBe true
   }
 
   test("boolean") {
