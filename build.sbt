@@ -27,7 +27,7 @@ libraryDependencies ++= {
     "com.github.julien-truffaut" %% "monocle-macro" % monocleVersion,
     "eu.timepit" %% "refined" % refinedVersion,
     "com.chuusai" %% "shapeless" % shapelessVersion,
-    "ch.qos.logback" % "logback-classic" % "1.2.3",
+    "ch.qos.logback" % "logback-classic" % "1.2.5",
     "org.tpolecat" %% "doobie-scalatest" % doobieVersion % Test,
     "org.scalatest" %% "scalatest" % "3.2.9" % Test
   )
