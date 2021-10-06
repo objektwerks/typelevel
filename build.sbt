@@ -9,7 +9,7 @@ libraryDependencies ++= {
   val http4sVersion = "0.21.25"
   val circeVersion = "0.14.1"
   val monocleVersion = "2.1.0"
-  val refinedVersion = "0.9.26"
+  val refinedVersion = "0.9.27"
   val shapelessVersion = "2.3.7"
   Seq(
     "org.typelevel" %% "cats-core" % catsVersion,
