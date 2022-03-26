@@ -1,6 +1,6 @@
 Typelevel
 ---------
->Typelevel project feature tests for:
+>Typelevel project feature tests ( cats -7, monad = 47 ):
 1. Cats
 2. Doobie
 3. FS2
@@ -8,9 +8,6 @@ Typelevel
 5. Monocle
 6. Refined
 7. Shapeless
-
-* cats - 7
-* monad - 47
 
 Test
 ----
