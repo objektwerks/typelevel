@@ -9,6 +9,9 @@ Typelevel
 6. Refined
 7. Shapeless
 
+1. cats - 7
+2. monad - 47
+
 Test
 ----
 1. sbt clean test
