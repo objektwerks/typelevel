@@ -29,6 +29,6 @@ libraryDependencies ++= {
     "com.chuusai" %% "shapeless" % shapelessVersion,
     "ch.qos.logback" % "logback-classic" % "1.4.5",
     "org.tpolecat" %% "doobie-scalatest" % doobieVersion % Test,
-    "org.scalatest" %% "scalatest" % "3.2.14" % Test
+    "org.scalatest" %% "scalatest" % "3.2.15" % Test
   )
 }
