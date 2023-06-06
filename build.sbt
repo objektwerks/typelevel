@@ -3,14 +3,14 @@ organization := "objektwerks"
 version := "0.1-SNAPSHOT"
 scalaVersion := "2.13.11"
 libraryDependencies ++= {
-  val catsVersion = "2.9.0"
-  val catsEffectVersion = "3.3.14"
+  val catsVersion = "2.7.0"
+  val catsEffectVersion = "2.5.1"
   val doobieVersion = "0.13.4"
-  val http4sVersion = "0.21.34"
-  val circeVersion = "0.14.5"
+  val http4sVersion = "0.21.25"
+  val circeVersion = "0.14.1"
   val monocleVersion = "2.1.0"
-  val refinedVersion = "0.10.3"
-  val shapelessVersion = "2.3.10"
+  val refinedVersion = "0.9.28"
+  val shapelessVersion = "2.3.7"
   Seq(
     "org.typelevel" %% "cats-core" % catsVersion,
     "org.typelevel" %% "cats-free" % catsVersion,
@@ -29,6 +29,6 @@ libraryDependencies ++= {
     "com.chuusai" %% "shapeless" % shapelessVersion,
     "ch.qos.logback" % "logback-classic" % "1.4.7",
     "org.tpolecat" %% "doobie-scalatest" % doobieVersion % Test,
-    "org.scalatest" %% "scalatest" % "3.2.16" % Test
+    "org.scalatest" %% "scalatest" % "3.2.15" % Test
   )
 }

@@ -23,7 +23,7 @@ import scala.concurrent.ExecutionContext
 case class Now(time: String = LocalTime.now.toString)
 
 object Now {
-  implicit val nowDecoder = jsonOf[IO, Now]
+  implicit val nowDecoder: EntityDecoder[IO, Now] = jsonOf[IO, Now]
 }
 
 object Headers {
