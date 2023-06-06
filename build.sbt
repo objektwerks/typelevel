@@ -33,4 +33,5 @@ libraryDependencies ++= {
   )
 }
 scalacOptions ++= Seq(
+  "-Xfatal-warnings"
 )
