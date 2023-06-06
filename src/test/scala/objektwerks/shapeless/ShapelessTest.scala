@@ -39,8 +39,8 @@ class ShapelessTest extends AnyFunSuite with Matchers {
 
   test("polymorphic") {
     object polyLength extends Poly1 {
-      implicit val listCase = at[List[Int]](i => i.length)
-      implicit val stringCase = at[String](s => s.length)
+      implicit val listCase: Case.Aux[List[Int], Int] = at[List[Int]](i => i.length)
+      implicit val stringCase: Case.Aux[String, Int] = at[String](s => s.length)
     }
     
     polyLength.apply(List(1, 2)) shouldBe 2

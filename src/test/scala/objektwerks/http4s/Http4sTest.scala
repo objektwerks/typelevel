@@ -20,12 +20,12 @@ import org.scalatest.matchers.should.Matchers
 
 case class Now(time: String = LocalTime.now.toString)
 object Now {
-  implicit val nowDecoder = jsonOf[IO, Now]
+  implicit val nowDecoder: EntityDecoder[IO, Now] = jsonOf[IO, Now]
 }
 
 case class Message(text: String)
 object Message {
-  implicit val messageDecoder = jsonOf[IO, Message]
+  implicit val messageDecoder: EntityDecoder[IO, Message] = jsonOf[IO, Message]
 }
 
 object Routes {

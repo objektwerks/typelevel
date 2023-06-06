@@ -7,10 +7,10 @@ trait Printable[A] {
 }
 
 object PrintableInstances {
-  implicit val stringPrintable = new Printable[String] {
+  implicit val stringPrintable: Printable[String] = new Printable[String] {
     def format(input: String) = input
   }
-  implicit val intPrintable = new Printable[Int] {
+  implicit val intPrintable: Printable[Int] = new Printable[Int] {
     def format(input: Int) = input.toString
   }
 }
@@ -31,7 +31,7 @@ case class Person(name: String, age: Int)
 
 object Person {
   import PrintableInstances._
-  implicit val personPrintable = new Printable[Person] {
+  implicit val personPrintable: Printable[Person] = new Printable[Person] {
     def format(person: Person) = {
       val name = Printable.format(person.name)
       val age = Printable.format(person.age)
