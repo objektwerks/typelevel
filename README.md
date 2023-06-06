@@ -23,4 +23,4 @@ Warning
 -------
 >As of 2023.6.6, **sbt clean test** works! See build.sbt for details.
 
->Typelevel library changes easily break code. :)
+>Typelevel library changes easily break code. And keeping up is tough. :)
