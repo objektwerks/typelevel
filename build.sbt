@@ -1,7 +1,7 @@
 name := "typelevel"
 organization := "objektwerks"
 version := "0.1-SNAPSHOT"
-scalaVersion := "2.13.10"
+scalaVersion := "2.13.11"
 libraryDependencies ++= {
   val catsVersion = "2.9.0"
   val catsEffectVersion = "2.5.1"
@@ -32,5 +32,3 @@ libraryDependencies ++= {
     "org.scalatest" %% "scalatest" % "3.2.15" % Test
   )
 }
-scalacOptions ++= Seq(
-) 
