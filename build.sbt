@@ -33,5 +33,6 @@ libraryDependencies ++= {
   )
 }
 scalacOptions ++= Seq(
-  "-Xfatal-warnings"
+  "-Xfatal-warnings",
+  // Too many Http4s implicit errors using: "-Xlint"
 )
