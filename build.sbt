@@ -34,7 +34,6 @@ libraryDependencies ++= {
 }
 scalacOptions ++= Seq(
   "-Xfatal-warnings",
-  // Too many Http4s implicit errors using: "-Xlint"
-  // https://github.com/typelevel/sbt-tpolecat also produces several unit value discarded silently errors
-  // This feature test project aside, all warnings should be enabled for a ***real*** Typelevel project. ;)
+  // Too many Http4s implicit errors using: "-Xlint".
+  // https://github.com/typelevel/sbt-tpolecat also produces several unit value discarded errors.
 )
