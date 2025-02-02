@@ -10,7 +10,7 @@ libraryDependencies ++= {
   val circeVersion = "0.14.2" // don't upgrade, no matter what!
   val monocleVersion = "2.1.0"
   val refinedVersion = "0.11.3"
-  val shapelessVersion = "2.3.10"
+  val shapelessVersion = "2.3.11"
   Seq(
     "org.typelevel" %% "cats-core" % catsVersion,
     "org.typelevel" %% "cats-free" % catsVersion,
