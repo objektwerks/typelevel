@@ -1,7 +1,7 @@
 name := "typelevel"
 organization := "objektwerks"
 version := "0.1-SNAPSHOT"
-scalaVersion := "2.13.17"
+scalaVersion := "2.13.18"
 libraryDependencies ++= {
   val catsVersion = "2.10.0"
   val catsEffectVersion = "2.5.5" // don't upgrade, tied to http4s!
